@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AuthStore } from '../../app/core/services/authStore';
+import { AuthStore } from '../../core/services/authStore';
 
 @Component({
   selector: 'app-categories',

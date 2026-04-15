@@ -6,13 +6,18 @@ export const routes: Routes = [
   {
     path: 'login',
     canActivate: [nonAuthGuard],
-    loadComponent: () => import('../pages/login/login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'register',
     canActivate: [nonAuthGuard],
     loadComponent: () =>
-      import('../pages/register/register.component').then((m) => m.RegisterComponent),
+      import('./pages/register/register.component').then((m) => m.RegisterComponent),
+  },
+  {
+    path: '',
+    redirectTo: 'categories',
+    pathMatch: 'full',
   },
   {
     path: '',
@@ -21,12 +26,7 @@ export const routes: Routes = [
       {
         path: 'categories',
         canActivate: [authGuard],
-        loadComponent: () => import('../pages/categories/categories').then((m) => m.Categories),
-      },
-      {
-        path: '',
-        redirectTo: 'categories',
-        pathMatch: 'full',
+        loadComponent: () => import('./pages/categories/categories').then((m) => m.Categories),
       },
     ],
   },
