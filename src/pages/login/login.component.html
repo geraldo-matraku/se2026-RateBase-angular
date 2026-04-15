@@ -1,0 +1,105 @@
+<div class="auth-root">
+  <div class="auth-left">
+    <div class="left-logo">
+      <div class="left-logo-dot"></div>
+      <span class="left-logo-name">RateBase</span>
+    </div>
+
+    <div class="left-mid">
+      <h1 class="left-tagline">
+        Vlerëso produktet.<br />
+        Ndaj mendimin tënd.<br />
+        Ndërto besimin.
+      </h1>
+      <p class="left-sub">Platforma e vlerësimit të produkteve ku çdo mendim ka rëndësi.</p>
+    </div>
+
+    <div class="left-bottom">© 2026 RateBase · Bachelor Project</div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-panel">
+      <div class="panel-tabs">
+        <button class="ptab active">Hyr në llogari</button>
+        <button class="ptab" routerLink="/register">Regjistrohu</button>
+      </div>
+
+      <h2 class="panel-title">Mirë se erdhe!</h2>
+      <p class="panel-sub">Hyr me llogarinë tënde për të vazhduar</p>
+
+      @if (authState$ | async; as state) {
+        <!-- ERROR -->
+        @if (state.error) {
+          <div class="alert-error">{{ state.error }}</div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <!-- Email -->
+          <div class="frow">
+            <label class="flabel">Email</label>
+            <input
+              class="finput"
+              [class.err]="email.invalid && email.touched"
+              formControlName="email"
+              type="email"
+              placeholder="email@example.com"
+            />
+
+            @if (email.touched && email.errors) {
+              <div class="errmsg">
+                @if (email.errors['required']) {
+                  <span>Email kërkohet</span>
+                }
+                @if (email.errors['email']) {
+                  <span>Email nuk është valid</span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="frow">
+            <label class="flabel">Fjalëkalimi</label>
+            <div class="pwrap">
+              <input
+                class="finput"
+                [class.err]="password.invalid && password.touched"
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="••••••••"
+              />
+              <button type="button" class="ptoggle" (click)="showPassword = !showPassword">
+                {{ showPassword ? '🙈' : '👁' }}
+              </button>
+            </div>
+
+            @if (password.touched && password.errors) {
+              <div class="errmsg">
+                @if (password.errors['required']) {
+                  <span>Fjalëkalimi kërkohet</span>
+                }
+                @if (password.errors['minlength']) {
+                  <span>Minimumi 6 karaktere</span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- BUTTON -->
+          <button class="sbtn" type="submit" [disabled]="state.loading">
+            @if (state.loading) {
+              <app-loading-spinner></app-loading-spinner>
+            } @else {
+              Hyr
+            }
+          </button>
+        </form>
+      }
+
+      <div class="switch-txt">
+        Nuk ke llogari?
+        <a routerLink="/register">Regjistrohu falas</a>
+      </div>
+    </div>
+  </div>
+</div>
