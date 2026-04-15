@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthStore } from '../../app/core/services/authStore';
 
 @Component({
   selector: 'app-categories',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './categories.scss',
 })
 export class Categories {
-  onLogout() {}
+  private authStore = inject(AuthStore);
+  onLogout() {
+    this.authStore.logout();
+  }
 }

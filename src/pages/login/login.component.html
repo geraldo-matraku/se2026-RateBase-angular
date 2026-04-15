@@ -14,7 +14,7 @@
       <p class="left-sub">Platforma e vlerësimit të produkteve ku çdo mendim ka rëndësi.</p>
     </div>
 
-    <div class="left-bottom">© 2026 RateBase · Bachelor Project</div>
+    <div class="left-bottom">© 2026 RateBase</div>
   </div>
 
   <div class="auth-right">
@@ -28,13 +28,11 @@
       <p class="panel-sub">Hyr me llogarinë tënde për të vazhduar</p>
 
       @if (authState$ | async; as state) {
-        <!-- ERROR -->
         @if (state.error) {
           <div class="alert-error">{{ state.error }}</div>
         }
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <!-- Email -->
           <div class="frow">
             <label class="flabel">Email</label>
             <input
@@ -57,7 +55,6 @@
             }
           </div>
 
-          <!-- Password -->
           <div class="frow">
             <label class="flabel">Fjalëkalimi</label>
             <div class="pwrap">
@@ -85,7 +82,6 @@
             }
           </div>
 
-          <!-- BUTTON -->
           <button class="sbtn" type="submit" [disabled]="state.loading">
             @if (state.loading) {
               <app-loading-spinner></app-loading-spinner>

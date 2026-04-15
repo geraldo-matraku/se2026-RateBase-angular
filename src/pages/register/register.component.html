@@ -28,11 +28,10 @@
         }
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <!-- FIRST + LAST NAME -->
           <div class="frow-2">
             <div>
               <label class="flabel">Emri</label>
-              <input class="finput" formControlName="first_name" />
+              <input class="grid-input" formControlName="first_name" placeholder="John" />
 
               @if (first_name.touched && first_name.errors) {
                 <div class="errmsg">
@@ -43,7 +42,7 @@
 
             <div>
               <label class="flabel">Mbiemri</label>
-              <input class="finput" formControlName="last_name" />
+              <input class="grid-input" formControlName="last_name" placeholder="Doe" />
 
               @if (last_name.touched && last_name.errors) {
                 <div class="errmsg">
@@ -53,10 +52,14 @@
             </div>
           </div>
 
-          <!-- EMAIL -->
           <div class="frow">
             <label class="flabel">Email</label>
-            <input class="finput" formControlName="email" type="email" />
+            <input
+              class="finput"
+              formControlName="email"
+              type="email"
+              placeholder="email@example.com"
+            />
 
             @if (email.touched && email.errors) {
               <div class="errmsg">
@@ -70,7 +73,6 @@
             }
           </div>
 
-          <!-- PASSWORD -->
           <div class="frow">
             <label class="flabel">Fjalëkalimi</label>
             <div class="pwrap">
@@ -78,6 +80,7 @@
                 class="finput"
                 formControlName="password"
                 [type]="showPassword ? 'text' : 'password'"
+                placeholder="••••••••"
               />
               <button type="button" (click)="showPassword = !showPassword">
                 {{ showPassword ? '🙈' : '👁' }}
@@ -96,7 +99,6 @@
             }
           </div>
 
-          <!-- BUTTON -->
           <button class="sbtn" type="submit" [disabled]="state.loading">
             @if (state.loading) {
               <app-loading-spinner></app-loading-spinner>

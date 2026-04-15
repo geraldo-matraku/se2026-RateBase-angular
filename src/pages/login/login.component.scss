@@ -3,7 +3,6 @@
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 
-  // ─── Left panel ───────────────────────────────────────────────
   .auth-left {
     width: 420px;
     flex-shrink: 0;
@@ -25,6 +24,7 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.05);
     }
+
     &::after {
       content: '';
       position: absolute;
@@ -43,12 +43,14 @@
       z-index: 1;
       position: relative;
     }
+
     .left-logo-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       background: #85b7eb;
     }
+
     .left-logo-name {
       font-size: 18px;
       font-weight: 500;
@@ -59,6 +61,7 @@
       z-index: 1;
       position: relative;
     }
+
     .left-tagline {
       font-size: 26px;
       font-weight: 500;
@@ -66,38 +69,11 @@
       line-height: 1.35;
       margin-bottom: 16px;
     }
+
     .left-sub {
       font-size: 14px;
       color: #85b7eb;
       line-height: 1.6;
-    }
-
-    .left-features {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 28px;
-    }
-    .feat-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .feat-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      flex-shrink: 0;
-    }
-    .feat-text {
-      font-size: 13px;
-      color: #b5d4f4;
-      line-height: 1.4;
     }
 
     .left-bottom {
@@ -108,27 +84,29 @@
     }
   }
 
-  // ─── Right panel ──────────────────────────────────────────────
   .auth-right {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 48px;
+    padding: 30px 40px;
     background: #fff;
   }
 
   .auth-panel {
     width: 100%;
-    max-width: 400px;
+    max-width: 400px; // 👈 ULR nga 360 → 400
+    border: 1px solid #aaa;
+    padding: 28px;
+    border-radius: 11px;
   }
 
-  // ─── Tabs ─────────────────────────────────────────────────────
   .panel-tabs {
     display: flex;
     border-bottom: 1px solid #e5e7eb;
-    margin-bottom: 28px;
+    margin-bottom: 22px;
   }
+
   .ptab {
     flex: 1;
     padding: 10px 0;
@@ -148,53 +126,56 @@
       color: #185fa5;
       border-bottom-color: #185fa5;
     }
+
     &:not(.active):hover {
       color: #374151;
     }
   }
 
-  // ─── Headings ─────────────────────────────────────────────────
   .panel-title {
     font-size: 20px;
     font-weight: 500;
     color: #111827;
-    margin-bottom: 4px;
+    margin-bottom: 10px;
   }
+
   .panel-sub {
     font-size: 13px;
     color: #6b7280;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
   }
 
-  // ─── Form layout ──────────────────────────────────────────────
   .frow {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
+
   .frow-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .flabel {
-    font-size: 12px;
+    font-size: 15px;
     color: #374151;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-weight: 500;
   }
 
+  .grid-input,
   .finput {
     width: 100%;
-    height: 40px;
-    border: 1px solid #e5e7eb;
+    height: 36px;
+    border: 1px solid #aaa;
     border-radius: 8px;
-    padding: 0 12px;
+    padding: 0 10px;
     font-size: 13px;
     color: #111827;
     background: #fff;
     outline: none;
+    box-sizing: border-box;
     transition:
       border-color 0.15s,
       box-shadow 0.15s;
@@ -207,32 +188,16 @@
       border-color: #185fa5;
       box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.08);
     }
+
     &.err {
       border-color: #e24b4a;
+
       &:focus {
         box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.08);
       }
     }
   }
 
-  .errmsg {
-    font-size: 11px;
-    color: #a32d2d;
-    margin-top: 4px;
-    min-height: 16px;
-  }
-
-  .alert-error {
-    background: #fcebeb;
-    color: #a32d2d;
-    font-size: 13px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #f7c1c1;
-  }
-
-  // ─── Password wrap ────────────────────────────────────────────
   .pwrap {
     position: relative;
 
@@ -240,7 +205,7 @@
       padding-right: 42px;
     }
 
-    .ptoggle {
+    button {
       position: absolute;
       right: 12px;
       top: 50%;
@@ -250,82 +215,29 @@
       cursor: pointer;
       color: #9ca3af;
       font-size: 14px;
-      line-height: 1;
-      padding: 0;
-      transition: color 0.15s;
-
-      &:hover {
-        color: #6b7280;
-      }
     }
   }
 
-  // ─── Strength bar ─────────────────────────────────────────────
-  .str-bar {
-    height: 3px;
-    border-radius: 2px;
-    background: #f3f4f6;
-    margin-top: 6px;
-    overflow: hidden;
-  }
-  .str-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition:
-      width 0.3s,
-      background 0.3s;
-  }
-  .str-lbl {
+  .errmsg {
     font-size: 11px;
-    margin-top: 3px;
-    min-height: 16px;
-    transition: color 0.3s;
+    color: #a32d2d;
+    margin-top: 6px;
+    min-height: 14px;
   }
 
-  // ─── Remember / forgot ────────────────────────────────────────
-  .remember-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .check-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
+  .alert-error {
+    background: #fcebeb;
+    color: #a32d2d;
     font-size: 13px;
-    color: #6b7280;
-    cursor: pointer;
-
-    input[type='checkbox'] {
-      accent-color: #185fa5;
-    }
-  }
-  .forgot {
-    font-size: 13px;
-    color: #185fa5;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  // ─── Role note ────────────────────────────────────────────────
-  .role-note {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
     border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 18px;
-    line-height: 1.5;
+    margin-bottom: 16px;
+    border: 1px solid #f7c1c1;
   }
 
-  // ─── Submit button ────────────────────────────────────────────
   .sbtn {
     width: 100%;
-    height: 42px;
+    height: 38px;
     border: none;
     border-radius: 8px;
     background: #185fa5;
@@ -341,16 +253,17 @@
     &:hover:not(:disabled) {
       opacity: 0.9;
     }
+
     &:active:not(:disabled) {
       transform: scale(0.99);
     }
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
   }
 
-  // ─── Switch text ─────────────────────────────────────────────
   .switch-txt {
     text-align: center;
     font-size: 13px;
@@ -358,19 +271,19 @@
 
     a {
       color: #185fa5;
-      cursor: pointer;
       text-decoration: none;
+
       &:hover {
         text-decoration: underline;
       }
     }
   }
 
-  // ─── Success panel ────────────────────────────────────────────
   .success-panel {
     text-align: center;
     padding: 60px 20px;
   }
+
   .suc-circle {
     width: 64px;
     height: 64px;
@@ -383,12 +296,14 @@
     font-size: 26px;
     color: #0f6e56;
   }
+
   .suc-title {
     font-size: 20px;
     font-weight: 500;
     color: #111827;
     margin-bottom: 8px;
   }
+
   .suc-sub {
     font-size: 14px;
     color: #6b7280;
