@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
-import { environments } from '../environments/environments';
+import { environments } from '../../environments/environments';
 
 export interface User {
   user_id: number;

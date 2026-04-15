@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthStore } from '../../core/authStore';
+import { AuthStore } from '../../app/core/authStore';
 import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 @Component({
   selector: 'app-login',
