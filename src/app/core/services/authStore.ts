@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { AuthService, User } from './auth-service';
 import { Router } from '@angular/router';
 
@@ -7,6 +7,7 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
+  initialized: boolean; // 🔥 Tregon nëse kontrolli i parë me serverin ka përfunduar
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,13 +19,30 @@ export class AuthStore {
     user: null,
     loading: false,
     error: null,
+    initialized: false,
   });
 
+  // Selectors
   state$ = this.state.asObservable();
   user$ = this.state$.pipe(map((s) => s.user));
+  loading$ = this.state$.pipe(map((s) => s.loading));
+  error$ = this.state$.pipe(map((s) => s.error));
+  initialized$ = this.state$.pipe(map((s) => s.initialized)); // 🔥 E rëndësishme për Guards
 
   private setState(newState: Partial<AuthState>) {
     this.state.next({ ...this.state.value, ...newState });
+  }
+
+  fetchMe() {
+    this.setState({ loading: true });
+    this.authService.me().subscribe({
+      next: (user) => {
+        this.setState({ user, loading: false, initialized: true });
+      },
+      error: () => {
+        this.setState({ user: null, loading: false, initialized: true });
+      },
+    });
   }
 
   login(credentials: any) {
@@ -32,18 +50,18 @@ export class AuthStore {
 
     this.authService.login(credentials).subscribe({
       next: () => {
-        // 🔥 WAIT 100–300ms që cookie të vendoset
         setTimeout(() => {
           this.authService.me().subscribe({
             next: (user) => {
-              this.setState({ user, loading: false });
+              this.setState({ user, loading: false, initialized: true });
               this.router.navigate(['/categories']);
             },
             error: (err) => {
               this.setState({
                 user: null,
                 loading: false,
-                error: err?.error,
+                error: err?.error?.message || 'Session verification failed',
+                initialized: true,
               });
             },
           });
@@ -54,12 +72,12 @@ export class AuthStore {
           user: null,
           loading: false,
           error: err?.error?.message || 'Login failed',
+          initialized: true,
         });
       },
     });
   }
 
-  // 🔥 REGISTER FIXED
   register(data: any) {
     this.setState({ loading: true, error: null });
 
@@ -67,11 +85,11 @@ export class AuthStore {
       next: () => {
         this.authService.me().subscribe({
           next: (user) => {
-            this.setState({ user, loading: false });
+            this.setState({ user, loading: false, initialized: true });
             this.router.navigate(['/categories']);
           },
           error: () => {
-            this.setState({ user: null, loading: false });
+            this.setState({ user: null, loading: false, initialized: true });
           },
         });
       },
@@ -80,35 +98,22 @@ export class AuthStore {
           user: null,
           loading: false,
           error: err?.error?.message || 'Register failed',
+          initialized: true,
         });
       },
     });
   }
 
-  // 🔥 ME
-  fetchMe() {
-    this.authService.me().subscribe({
-      next: (user) => {
-        console.log(user);
-        this.setState({ user, loading: false });
-      },
-      error: () => {
-        this.setState({ user: null, loading: false });
-      },
-    });
-  }
-
-  // 🔥 LOGOUT
   logout() {
     this.setState({ loading: true });
 
     this.authService.logout().subscribe({
       next: () => {
-        this.setState({ user: null, loading: false });
+        this.setState({ user: null, loading: false, initialized: true });
         this.router.navigate(['/login']);
       },
       error: () => {
-        this.setState({ user: null, loading: false });
+        this.setState({ user: null, loading: false, initialized: true });
         this.router.navigate(['/login']);
       },
     });
