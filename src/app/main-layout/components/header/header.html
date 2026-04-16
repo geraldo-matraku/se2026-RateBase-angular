@@ -1,1 +1,32 @@
-<p>header works!</p>
+<header class="main-header">
+  <div class="container">
+    <div class="logo-section">
+      <div class="logo-dot"></div>
+      <span class="brand-name">Rate<span>Base</span></span>
+    </div>
+
+    <nav class="nav-links">
+      <a [routerLink]="['/categories']" class="nav-item" routerLinkActive="active">Kategorite</a>
+      <a [routerLink]="['/myreviews']" class="nav-item" routerLinkActive="active"
+        >Vleresimet e mia</a
+      >
+    </nav>
+
+    <div class="user-section">
+      <div class="user-info">
+        <div class="avatar">{{ authStore.initials$ | async }}</div>
+        <div class="details">
+          <span class="username">{{ authStore.firstName$ | async }}</span>
+          <span class="role-badge">{{ authStore.role$ | async }}</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <button class="logout-btn" (click)="onLogout()">
+        <i class="material-icons">logout</i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</header>

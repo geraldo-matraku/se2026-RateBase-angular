@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
 import { AuthService, User } from './auth-service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
-  initialized: boolean; // 🔥 Tregon nëse kontrolli i parë me serverin ka përfunduar
+  initialized: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,15 +22,26 @@ export class AuthStore {
     initialized: false,
   });
 
-  // Selectors
   state$ = this.state.asObservable();
   user$ = this.state$.pipe(map((s) => s.user));
+  role$ = this.user$.pipe(map((s) => s?.role));
+  firstName$ = this.user$.pipe(map((s) => s?.first_name));
+  lastName$ = this.user$.pipe(map((s) => s?.last_name));
+
   loading$ = this.state$.pipe(map((s) => s.loading));
   error$ = this.state$.pipe(map((s) => s.error));
-  initialized$ = this.state$.pipe(map((s) => s.initialized)); // 🔥 E rëndësishme për Guards
-
+  initialized$ = this.state$.pipe(map((s) => s.initialized));
+  initials$ = combineLatest([this.firstName$, this.lastName$]).pipe(
+    map(([first, last]) => {
+      return `${first?.charAt(0) ?? ''}${last?.charAt(0) ?? ''}`.toUpperCase();
+    }),
+  );
   private setState(newState: Partial<AuthState>) {
     this.state.next({ ...this.state.value, ...newState });
+  }
+
+  setError() {
+    this.state.next({ ...this.state.value, error: null });
   }
 
   fetchMe() {
