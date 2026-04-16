@@ -4,6 +4,11 @@ import { nonAuthGuard } from './core/guards/nonAuthGuard';
 
 export const routes: Routes = [
   {
+    path: '',
+    loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
+    canActivate: [nonAuthGuard],
+  },
+  {
     path: 'login',
     canActivate: [nonAuthGuard],
     loadComponent: () => import('./pages/login/login.component').then((m) => m.LoginComponent),
@@ -13,11 +18,6 @@ export const routes: Routes = [
     canActivate: [nonAuthGuard],
     loadComponent: () =>
       import('./pages/register/register.component').then((m) => m.RegisterComponent),
-  },
-  {
-    path: '',
-    redirectTo: 'categories',
-    pathMatch: 'full',
   },
   {
     path: '',
@@ -31,12 +31,13 @@ export const routes: Routes = [
       },
       {
         path: 'myreviews',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews),
       },
     ],
   },
   {
     path: '**',
-    redirectTo: 'categories',
+    redirectTo: '',
   },
 ];
