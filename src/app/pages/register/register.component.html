@@ -6,8 +6,8 @@
     </div>
 
     <div class="left-mid">
-      <h1 class="left-tagline">Krijo llogarinë<br />tënde falas.</h1>
-      <p class="left-sub">Bashkohu me platformën e vlerësimit të produkteve.</p>
+      <h1 class="left-tagline">Krijo llogarine<br />tende falas.</h1>
+      <p class="left-sub">Bashkohu me platformen e vleresimit te produkteve.</p>
     </div>
 
     <div class="left-bottom">© 2026 RateBase</div>
@@ -16,7 +16,7 @@
   <div class="auth-right">
     <div class="auth-panel">
       <div class="panel-tabs">
-        <button class="ptab" routerLink="/login">Hyr në llogari</button>
+        <button class="ptab" (click)="onNavigation()">Hyr ne llogari</button>
         <button class="ptab active">Regjistrohu</button>
       </div>
 
@@ -35,7 +35,7 @@
 
               @if (first_name.touched && first_name.errors) {
                 <div class="errmsg">
-                  <span>Emri kërkohet</span>
+                  <span>Ju lutem vendosni emrin</span>
                 </div>
               }
             </div>
@@ -46,7 +46,7 @@
 
               @if (last_name.touched && last_name.errors) {
                 <div class="errmsg">
-                  <span>Mbiemri kërkohet</span>
+                  <span>Ju lutem vendosni mbiemrin</span>
                 </div>
               }
             </div>
@@ -64,17 +64,17 @@
             @if (email.touched && email.errors) {
               <div class="errmsg">
                 @if (email.errors['required']) {
-                  <span>Email kërkohet</span>
+                  <span>Ju lutem vendosni email</span>
                 }
                 @if (email.errors['email']) {
-                  <span>Email nuk është valid</span>
+                  <span>Email nuk eshte valid</span>
                 }
               </div>
             }
           </div>
 
           <div class="frow">
-            <label class="flabel">Fjalëkalimi</label>
+            <label class="flabel">Fjalekalimi</label>
             <div class="pwrap">
               <input
                 class="finput"
@@ -90,7 +90,7 @@
             @if (password.touched && password.errors) {
               <div class="errmsg">
                 @if (password.errors['required']) {
-                  <span>Fjalëkalimi kërkohet</span>
+                  <span>Ju lutem vendosni fjalekalimin</span>
                 }
                 @if (password.errors['minlength']) {
                   <span>Minimumi 6 karaktere</span>
@@ -109,7 +109,9 @@
         </form>
       }
 
-      <div class="switch-txt">Ke llogari? <a routerLink="/login">Hyr këtu</a></div>
+      <div class="switch-txt">
+        Ke llogari? <span class="register_span" (click)="onNavigation()"> Hyr ketu </span>
+      </div>
     </div>
   </div>
 </div>

@@ -7,11 +7,11 @@
 
     <div class="left-mid">
       <h1 class="left-tagline">
-        Vlerëso produktet.<br />
-        Ndaj mendimin tënd.<br />
-        Ndërto besimin.
+        Vlereso produktet.<br />
+        Ndaj mendimin tend.<br />
+        Nderto besimin.
       </h1>
-      <p class="left-sub">Platforma e vlerësimit të produkteve ku çdo mendim ka rëndësi.</p>
+      <p class="left-sub">Platforma e vleresimit te produkteve ku çdo mendim ka rendesi.</p>
     </div>
 
     <div class="left-bottom">© 2026 RateBase</div>
@@ -20,12 +20,12 @@
   <div class="auth-right">
     <div class="auth-panel">
       <div class="panel-tabs">
-        <button class="ptab active">Hyr në llogari</button>
-        <button class="ptab" routerLink="/register">Regjistrohu</button>
+        <button class="ptab active">Hyr ne llogari</button>
+        <button class="ptab" (click)="onNavigation()">Regjistrohu</button>
       </div>
 
-      <h2 class="panel-title">Mirë se erdhe!</h2>
-      <p class="panel-sub">Hyr me llogarinë tënde për të vazhduar</p>
+      <h2 class="panel-title">Mire se erdhe!</h2>
+      <p class="panel-sub">Hyr me llogarine tende per te vazhduar</p>
 
       @if (authState$ | async; as state) {
         @if (state.error) {
@@ -46,17 +46,17 @@
             @if (email.touched && email.errors) {
               <div class="errmsg">
                 @if (email.errors['required']) {
-                  <span>Email kërkohet</span>
+                  <span>Ju lutem vendosni email</span>
                 }
                 @if (email.errors['email']) {
-                  <span>Email nuk është valid</span>
+                  <span>Email nuk eshte valid</span>
                 }
               </div>
             }
           </div>
 
           <div class="frow">
-            <label class="flabel">Fjalëkalimi</label>
+            <label class="flabel">Fjalekalimi</label>
             <div class="pwrap">
               <input
                 class="finput"
@@ -73,7 +73,7 @@
             @if (password.touched && password.errors) {
               <div class="errmsg">
                 @if (password.errors['required']) {
-                  <span>Fjalëkalimi kërkohet</span>
+                  <span>Ju lutem vendosni fjalekalimin</span>
                 }
                 @if (password.errors['minlength']) {
                   <span>Minimumi 6 karaktere</span>
@@ -94,7 +94,7 @@
 
       <div class="switch-txt">
         Nuk ke llogari?
-        <a routerLink="/register">Regjistrohu falas</a>
+        <span class="register_span" (click)="onNavigation()">Regjistrohu Falas</span>
       </div>
     </div>
   </div>

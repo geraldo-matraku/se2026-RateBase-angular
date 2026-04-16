@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthStore } from '../../core/services/authStore';
 import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 
@@ -15,6 +15,7 @@ import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authStore = inject(AuthStore);
+  router = inject(Router);
 
   showPassword = false;
 
@@ -52,5 +53,10 @@ export class RegisterComponent {
       email: this.email.value!,
       password: this.password.value!,
     });
+  }
+
+  onNavigation() {
+    this.authStore.setError();
+    this.router.navigate(['/login']);
   }
 }
