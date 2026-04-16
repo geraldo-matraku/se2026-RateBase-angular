@@ -1,2 +1,54 @@
-<p>categories works!</p>
-<button (click)="onLogout()">Logout</button>
+<div class="categories-page">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="label">Produkte gjithsej</div>
+      <div class="value">124</div>
+      <div class="change positive">+8 këtë muaj</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="label">Reviews aktive</div>
+      <div class="value">2,847</div>
+      <div class="change positive">+143 këtë javë</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="label">Raportime pending</div>
+      <div class="value danger">17</div>
+      <div class="change danger">Kërkon vëmendje</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="label">Rating mesatar</div>
+      <div class="value">4.2</div>
+      <div class="change">nga 5 yje</div>
+    </div>
+  </div>
+
+  <div class="header">
+    <div>
+      <h2>Kategoritë</h2>
+      <p>Menaxho kategoritë e produkteve</p>
+    </div>
+
+    <button class="add-btn">+ Produkt i ri</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="material-icons">search</i>
+      <input type="text" placeholder="Kërko kategori..." [(ngModel)]="searchTerm" />
+    </div>
+  </div>
+
+  <div class="categories-grid">
+    <div class="category-card" *ngFor="let cat of filteredCategories()">
+      <div class="icon">{{ cat.icon }}</div>
+
+      <div class="content">
+        <div class="title">{{ cat.name }}</div>
+        <div class="count">{{ cat.count }} produkte</div>
+      </div>
+    </div>
+  </div>
+</div>
