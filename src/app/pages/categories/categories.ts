@@ -158,53 +158,6 @@ import { StatsComponent } from '../../shared/stats/stats';
       }
     }
 
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 18px 20px;
-      border: 1px solid #cbd5e1;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-      }
-
-      .label {
-        font-size: 13px;
-        color: #6b7280;
-        margin-bottom: 6px;
-      }
-
-      .value {
-        font-size: 26px;
-        font-weight: 600;
-        color: #111827;
-      }
-
-      .change {
-        font-size: 12px;
-        margin-top: 4px;
-        color: #6b7280;
-      }
-
-      .positive {
-        color: #16a34a;
-      }
-
-      .danger {
-        color: #dc2626;
-      }
-    }
-
     .categories-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -257,22 +210,56 @@ import { StatsComponent } from '../../shared/stats/stats';
         }
 
         .count {
-          font-size: 0.85rem;
-          color: #718096;
+          font-size: 13px;
+          font-weight: 600;
+
+          color: #185fa5;
+
+          background: rgba(24, 95, 165, 0.08);
+
+          width: fit-content;
+
+          padding: 4px 10px;
+
+          border-radius: 999px;
+
+          margin-top: 2px;
         }
       }
+    }
+    .description {
+      margin-top: 6px;
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      color: #6b7280;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 2; // max 2 rreshta
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      max-width: 100%;
     }
   `,
 })
 export class CategoriesComponent implements OnInit {
   authStore = inject(AuthStore);
 
+  searchParam: string | null = null;
   categoriesStore = inject(CategoriesStore);
   categoriesService = inject(CategoriesService);
   imgBase = this.categoriesService.uploadUrl;
 
   ngOnInit() {
     this.categoriesStore.loadCategories();
+  }
+
+  onSearchChange(param: string) {
+    this.categoriesStore.searchCategories(param);
   }
 
   onLogout() {

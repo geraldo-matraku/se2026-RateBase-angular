@@ -6,12 +6,18 @@
       <h2>Kategoritë</h2>
       <p>Menaxho kategoritë e produkteve</p>
     </div>
-    <button class="add-btn">+ Produkt i ri</button>
+    <button class="add-btn">+ Kategori e re</button>
   </div>
 
   <div class="toolbar">
     <div class="search-box">
       <i class="material-icons">search</i>
+      <input
+        type="text"
+        [(ngModel)]="searchParam"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Kerko Kategori"
+      />
     </div>
   </div>
 
@@ -32,6 +38,7 @@
           <div class="content">
             <div class="title">{{ cat.name }}</div>
             <div class="count">{{ cat.total_products || 0 }} produkte</div>
+            <div class="description">{{ cat.description }}</div>
           </div>
         </div>
       } @empty {

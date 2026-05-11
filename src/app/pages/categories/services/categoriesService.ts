@@ -30,7 +30,7 @@ export class CategoriesService {
 
   searchCategories(query: string): Observable<CategoriesResponse> {
     const params = new HttpParams().set('q', query);
-    return this.http.get<CategoriesResponse>(`${environments.apiUrl}/categories/getAll`, {
+    return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`, {
       params,
     });
   }
