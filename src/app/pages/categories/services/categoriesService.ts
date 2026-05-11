@@ -8,6 +8,7 @@ export interface Category {
   name: string;
   description: string;
   total_products: number;
+  image: string;
 }
 
 export interface CategoriesResponse {
@@ -16,19 +17,19 @@ export interface CategoriesResponse {
   total_categories: number;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CategoriesService {
   private http = inject(HttpClient);
 
+  // URL bazë për të shfaqur fotot
+  public readonly uploadUrl = 'http://localhost/sistem-vleresimi-produktesh-php/uploads/';
+
   getCategories(): Observable<CategoriesResponse> {
-    return this.http.get<CategoriesResponse>(`${environments.apiUrl}/categories/getAll`);
+    return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`);
   }
 
   searchCategories(query: string): Observable<CategoriesResponse> {
     const params = new HttpParams().set('q', query);
-
     return this.http.get<CategoriesResponse>(`${environments.apiUrl}/categories/getAll`, {
       params,
     });

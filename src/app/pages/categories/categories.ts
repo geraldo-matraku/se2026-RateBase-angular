@@ -1,43 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthStore } from '../../core/services/authStore';
+import { CategoriesStore } from './store/categoriesStore';
+import { CategoriesService } from './services/categoriesService';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Category {
-  id: number;
-  name: string;
-  icon: string;
-  count: number;
-}
+import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinner],
   templateUrl: './categories.html',
   styleUrls: ['./categories.scss'],
 })
-export class CategoriesComponent {
-  searchTerm: string = '';
+export class CategoriesComponent implements OnInit {
   authStore = inject(AuthStore);
 
-  categories: Category[] = [
-    { id: 1, name: 'Elektronikë', icon: '💻', count: 120 },
-    { id: 2, name: 'Mobile', icon: '📱', count: 80 },
-    { id: 3, name: 'Audio', icon: '🎧', count: 45 },
-    { id: 4, name: 'Aksesorë', icon: '⌨️', count: 60 },
-    { id: 5, name: 'Gaming', icon: '🎮', count: 35 },
-    { id: 6, name: 'Monitor', icon: '🖥️', count: 25 },
-    { id: 7, name: 'TV & Media', icon: '📺', count: 40 },
-    { id: 8, name: 'Smart Home', icon: '🏠', count: 20 },
-  ];
+  categoriesStore = inject(CategoriesStore);
+  categoriesService = inject(CategoriesService);
+  imgBase = this.categoriesService.uploadUrl;
 
-  filteredCategories(): Category[] {
-    if (!this.searchTerm) return this.categories;
-
-    return this.categories.filter((c) =>
-      c.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
-    );
+  ngOnInit() {
+    this.categoriesStore.loadCategories();
   }
+
   onLogout() {
     this.authStore.logout();
   }

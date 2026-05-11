@@ -17,7 +17,7 @@ const initialState: CategoriesState = {
   error: null,
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoriesStore extends ComponentStore<CategoriesState> {
   private categoriesService = inject(CategoriesService);
 
