@@ -1,6 +1,5 @@
 <div class="categories-page">
   <app-stats></app-stats>
-
   <div class="header">
     <div>
       <h2>Kategoritë</h2>
@@ -22,7 +21,7 @@
   </div>
 
   @if (categoriesStore.loading$ | async) {
-    <app-loading-spinner></app-loading-spinner>
+    <app-spinner></app-spinner>
   } @else {
     <div class="categories-grid">
       @for (cat of categoriesStore.categories$ | async; track cat.category_id) {

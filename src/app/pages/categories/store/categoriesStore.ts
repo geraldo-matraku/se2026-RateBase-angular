@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { CategoriesService, Category } from '../services/categoriesService';
 
 export interface CategoriesState {
@@ -56,6 +56,7 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
       }),
       switchMap(() =>
         this.categoriesService.getCategories().pipe(
+          delay(500),
           tap({
             next: (res) => {
               this.setCategoriesResponse({

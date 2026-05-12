@@ -4,13 +4,13 @@ import { CategoriesStore } from './store/categoriesStore';
 import { CategoriesService } from './services/categoriesService';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 import { StatsComponent } from '../../shared/stats/stats';
 import { RouterLink } from '@angular/router';
+import { Spinner } from '../../shared/spinner/spinner';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule, LoadingSpinner, StatsComponent, RouterLink],
+  imports: [CommonModule, FormsModule, StatsComponent, RouterLink, Spinner],
   templateUrl: './categories.html',
   styles: `
     .categories-page {
@@ -18,6 +18,7 @@ import { RouterLink } from '@angular/router';
       background: #f5f7fb;
       min-height: 100vh;
       font-family: Inter, sans-serif;
+      position: relative;
     }
 
     .header {

@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CategoryProductStore } from './store/category-products-store';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { CategoriesService } from '../categories/services/categoriesService';
-import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 import { FormsModule } from '@angular/forms';
+import { Spinner } from '../../shared/spinner/spinner';
 
 @Component({
   selector: 'app-category-products',
-  imports: [AsyncPipe, LoadingSpinner, FormsModule, CommonModule],
+  imports: [AsyncPipe, FormsModule, CommonModule, Spinner, RouterLink],
   templateUrl: './category-products.html',
   styleUrl: './category-products.scss',
 })

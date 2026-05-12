@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { catchError, EMPTY, pipe, switchMap, tap, map } from 'rxjs'; // Shtuar 'map'
+import { catchError, EMPTY, pipe, switchMap, tap, map, delay } from 'rxjs'; // Shtuar 'map'
 import { CategoryProductService, Product } from '../services/category-products-service';
 
 interface ProductState {
@@ -50,7 +50,7 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
       }),
       switchMap((categoryId) =>
         this.categoryProductsService.getProductsByCategory(categoryId).pipe(
-          // KORRIGJIMI: Ky bllok siguron që Response i API kthehet gjithmonë në Array
+          delay(500),
           map((res: any) => {
             if (Array.isArray(res)) {
               return res;
