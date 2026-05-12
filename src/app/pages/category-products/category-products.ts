@@ -6,10 +6,11 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { CategoriesService } from '../categories/services/categoriesService';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../../shared/spinner/spinner';
+import { RoleDirective } from '../../shared/directives/role-directive';
 
 @Component({
   selector: 'app-category-products',
-  imports: [AsyncPipe, FormsModule, CommonModule, Spinner, RouterLink],
+  imports: [AsyncPipe, FormsModule, CommonModule, Spinner, RouterLink, RoleDirective],
   templateUrl: './category-products.html',
   styleUrl: './category-products.scss',
 })

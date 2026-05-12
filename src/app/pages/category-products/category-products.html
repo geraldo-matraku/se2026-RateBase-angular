@@ -7,7 +7,7 @@
         <strong>{{ (store.products$ | async)?.[0]?.category_name || '...' }}</strong>
       </p>
     </div>
-    <button class="add-product-btn">
+    <button class="add-product-btn" *appRoleDirective="'admin'">
       <i class="material-icons">add</i>
       Produkt i ri
     </button>
@@ -30,40 +30,37 @@
   } @else {
     <div class="products-grid">
       @for (prod of store.products$ | async; track prod.product_id) {
-        <a [routerLink]="[prod.product_id]">
-          <div class="product-card">
-            <!-- Badge për Kategorinë -->
-            <div class="cat-badge">{{ prod.category_name }}</div>
+        <div class="product-card">
+          <div class="cat-badge">{{ prod.category_name }}</div>
 
-            <!-- Product Image -->
-            <div class="image-section">
-              <img
-                [src]="prod.image ? imgBase + prod.image : 'assets/no-image.png'"
-                [alt]="prod.name"
-              />
-              <div class="overlay-actions">
-                <button class="action-btn edit" title="Edito">
-                  <i class="material-icons">edit</i>
-                </button>
-                <button class="action-btn delete" title="Fshi">
-                  <i class="material-icons">delete_outline</i>
-                </button>
-              </div>
+          <div class="image-section">
+            <img
+              [src]="prod.image ? imgBase + prod.image : 'assets/no-image.png'"
+              [alt]="prod.name"
+            />
+          </div>
+          <div class="info-section">
+            <h3 class="product-name">{{ prod.name }}</h3>
+            <p class="product-desc">{{ prod.description }}</p>
+
+            <div class="footer-card">
+              <span class="date">
+                <i class="material-icons">calendar_today</i>
+                {{ prod.created_at | date: 'dd MMM, yyyy' }}
+              </span>
             </div>
 
-            <div class="info-section">
-              <h3 class="product-name">{{ prod.name }}</h3>
-              <p class="product-desc">{{ prod.description }}</p>
-
-              <div class="footer-card">
-                <span class="date">
-                  <i class="material-icons">calendar_today</i>
-                  {{ prod.created_at | date: 'dd MMM, yyyy' }}
-                </span>
-              </div>
+            <div class="action_container">
+              <a [routerLink]="[prod.product_id]" class="product_btn">Shiko Produktin</a>
+              <button class="btn-edit" *appRoleDirective="'admin'">
+                <i class="material-icons">edit</i>Edit
+              </button>
+              <button class="btn-delete" *appRoleDirective="'admin'">
+                <i class="material-icons">delete_sweep</i>Delete
+              </button>
             </div>
           </div>
-        </a>
+        </div>
       } @empty {
         <div class="empty-state">
           <i class="material-icons">inventory_2</i>

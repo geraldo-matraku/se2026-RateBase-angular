@@ -1,16 +1,19 @@
 <div class="categories-page">
   <app-stats></app-stats>
+
   <div class="header">
     <div>
       <h2>Kategoritë</h2>
       <p>Menaxho kategoritë e produkteve</p>
     </div>
-    <button class="add-btn">+ Kategori e re</button>
+
+    <button class="add-btn" *appRoleDirective="'admin'">+ Kategori e re</button>
   </div>
 
   <div class="toolbar">
     <div class="search-box">
       <i class="material-icons">search</i>
+
       <input
         type="text"
         [(ngModel)]="searchParam"
@@ -25,7 +28,8 @@
   } @else {
     <div class="categories-grid">
       @for (cat of categoriesStore.categories$ | async; track cat.category_id) {
-        <a [routerLink]="['/categories', cat.category_id]">
+        <div class="card">
+          <!-- TOP -->
           <div class="category-card">
             <div class="category-image">
               <img
@@ -37,11 +41,32 @@
 
             <div class="content">
               <div class="title">{{ cat.name }}</div>
+
               <div class="count">{{ cat.total_products || 0 }} produkte</div>
-              <div class="description">{{ cat.description }}</div>
+
+              <div class="description">
+                {{ cat.description }}
+              </div>
             </div>
           </div>
-        </a>
+
+          <!-- BOTTOM -->
+          <div class="action_container">
+            <a [routerLink]="['/categories', cat.category_id]" class="product_btn">
+              Shiko Kategorine
+            </a>
+
+            <button class="btn-edit" *appRoleDirective="'admin'">
+              <i class="material-icons">edit</i>
+              Edit
+            </button>
+
+            <button class="btn-delete" *appRoleDirective="'admin'">
+              <i class="material-icons">delete_sweep</i>
+              Delete
+            </button>
+          </div>
+        </div>
       } @empty {
         <div class="empty-state">Nuk u gjet asnjë kategori.</div>
       }
