@@ -26,21 +26,23 @@
   } @else {
     <div class="categories-grid">
       @for (cat of categoriesStore.categories$ | async; track cat.category_id) {
-        <div class="category-card">
-          <div class="category-image">
-            <img
-              [src]="cat.image ? imgBase + cat.image : 'assets/no-image.png'"
-              [alt]="cat.name"
-              class="cat-thumb"
-            />
-          </div>
+        <a [routerLink]="['/categories', cat.category_id]">
+          <div class="category-card">
+            <div class="category-image">
+              <img
+                [src]="cat.image ? imgBase + cat.image : 'assets/no-image.png'"
+                [alt]="cat.name"
+                class="cat-thumb"
+              />
+            </div>
 
-          <div class="content">
-            <div class="title">{{ cat.name }}</div>
-            <div class="count">{{ cat.total_products || 0 }} produkte</div>
-            <div class="description">{{ cat.description }}</div>
+            <div class="content">
+              <div class="title">{{ cat.name }}</div>
+              <div class="count">{{ cat.total_products || 0 }} produkte</div>
+              <div class="description">{{ cat.description }}</div>
+            </div>
           </div>
-        </div>
+        </a>
       } @empty {
         <div class="empty-state">Nuk u gjet asnjë kategori.</div>
       }

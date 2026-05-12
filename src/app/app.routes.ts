@@ -30,6 +30,18 @@ export const routes: Routes = [
           import('./pages/categories/categories').then((m) => m.CategoriesComponent),
       },
       {
+        path: 'categories/:catId',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/category-products/category-products').then((m) => m.CategoryProducts),
+      },
+      {
+        path: 'categories/:catId/:prodId',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/product-details/product-details').then((m) => m.ProductDetails),
+      },
+      {
         path: 'myreviews',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews),

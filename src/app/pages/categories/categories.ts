@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingSpinner } from '../../shared/loading-spinner/loading-spinner';
 import { StatsComponent } from '../../shared/stats/stats';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule, LoadingSpinner, StatsComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinner, StatsComponent, RouterLink],
   templateUrl: './categories.html',
   styles: `
     .categories-page {
@@ -236,7 +237,7 @@ import { StatsComponent } from '../../shared/stats/stats';
       color: #6b7280;
 
       display: -webkit-box;
-      -webkit-line-clamp: 2; // max 2 rreshta
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
 
       overflow: hidden;

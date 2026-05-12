@@ -1,0 +1,84 @@
+<div class="products-page">
+  <!-- Header Section -->
+  <div class="header-container">
+    <div class="title-section">
+      <h2>Produktet</h2>
+      <p>
+        Duke parë produktet për kategorinë:
+        <strong>{{ (store.products$ | async)?.[0]?.category_name || '...' }}</strong>
+      </p>
+    </div>
+    <button class="add-product-btn">
+      <i class="material-icons">add</i>
+      Produkt i ri
+    </button>
+  </div>
+
+  <!-- Filters & Search -->
+  <div class="toolbar">
+    <div class="search-wrapper">
+      <i class="material-icons search-icon">search</i>
+      <input
+        type="text"
+        [(ngModel)]="searchParam"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Kërko me emër ose përshkrim..."
+      />
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  @if (store.loading$ | async) {
+    <app-loading-spinner></app-loading-spinner>
+  } @else {
+    <div class="products-grid">
+      @for (prod of store.products$ | async; track prod.product_id) {
+        <div class="product-card">
+          <!-- Badge për Kategorinë -->
+          <div class="cat-badge">{{ prod.category_name }}</div>
+
+          <!-- Product Image -->
+          <div class="image-section">
+            <img
+              [src]="prod.image ? imgBase + prod.image : 'assets/no-image.png'"
+              [alt]="prod.name"
+            />
+            <div class="overlay-actions">
+              <button class="action-btn edit" title="Edito">
+                <i class="material-icons">edit</i>
+              </button>
+              <button class="action-btn delete" title="Fshi">
+                <i class="material-icons">delete_outline</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3 class="product-name">{{ prod.name }}</h3>
+            <p class="product-desc">{{ prod.description }}</p>
+
+            <div class="footer-card">
+              <span class="date">
+                <i class="material-icons">calendar_today</i>
+                {{ prod.created_at | date: 'dd MMM, yyyy' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <i class="material-icons">inventory_2</i>
+          <h3>Asnjë produkt u gjet</h3>
+          <p>Nuk ka produkte të regjistruara në këtë kategori.</p>
+        </div>
+      }
+    </div>
+  }
+
+  @if (store.error$ | async; as error) {
+    <div class="error-banner">
+      <i class="material-icons">error_outline</i>
+      {{ error }}
+    </div>
+  }
+</div>
