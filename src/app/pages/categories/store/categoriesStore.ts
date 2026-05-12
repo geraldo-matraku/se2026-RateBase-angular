@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { switchMap, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { CategoriesService, Category } from '../services/categoriesService';
 
 export interface CategoriesState {
@@ -76,6 +76,7 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
 
   readonly searchCategories = this.effect<string>((query$) =>
     query$.pipe(
+      debounceTime(500),
       tap(() => {
         this.setLoading(true);
         this.setError(null);
