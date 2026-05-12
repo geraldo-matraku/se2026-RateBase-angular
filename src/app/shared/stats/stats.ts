@@ -9,6 +9,7 @@ import { StatsService } from '../../core/services/stats-service';
       padding: 32px;
       background: #f5f7fb;
     }
+
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
