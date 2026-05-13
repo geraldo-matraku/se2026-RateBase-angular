@@ -7,9 +7,12 @@
 .product-details {
   width: 100%;
   max-width: 720px;
-  padding: 0 20px 24px;
+  padding: 10px 20px 24px;
+  border-radius: 11px;
   box-sizing: border-box;
   background: #ffffff;
+  margin-top: 20px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
 
 .breadcrumb {
@@ -218,6 +221,7 @@
   border-radius: 8px;
   background: #ffffff;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .review-card__header {
@@ -336,19 +340,7 @@
 }
 
 .review-action {
-  min-width: 150px;
-  padding: 0 16px;
-
-  &--small {
-    min-width: 74px;
-    padding: 0 15px;
-  }
-}
-
-.report-button {
-  justify-self: end;
-  min-width: 100px;
-  padding: 0 14px;
+  padding: 5px 16px;
 }
 
 .scroll-button {
@@ -417,4 +409,10 @@
     flex: 1;
     min-width: 0;
   }
+}
+
+.product_big_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
