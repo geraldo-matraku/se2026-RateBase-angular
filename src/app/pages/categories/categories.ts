@@ -110,7 +110,6 @@ import { RoleDirective } from '../../shared/directives/role-directive';
       gap: 20px;
     }
 
-    /* CARD */
     .card {
       background: #fff;
       border-radius: 16px;
@@ -131,7 +130,6 @@ import { RoleDirective } from '../../shared/directives/role-directive';
       }
     }
 
-    /* TOP SECTION */
     .category-card {
       display: flex;
       align-items: flex-start;
@@ -206,56 +204,6 @@ import { RoleDirective } from '../../shared/directives/role-directive';
       gap: 10px;
 
       flex-wrap: wrap;
-    }
-
-    .product_btn,
-    .btn-edit,
-    .btn-delete {
-      height: 38px;
-
-      padding: 0 14px;
-
-      border-radius: 10px;
-      border: none;
-
-      display: flex;
-      align-items: center;
-      gap: 6px;
-
-      font-size: 13px;
-      font-weight: 500;
-
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      text-decoration: none;
-    }
-
-    .product_btn {
-      background: #185fa5;
-      color: white;
-
-      &:hover {
-        background: #134a82;
-      }
-    }
-
-    .btn-edit {
-      background: #f59e0b;
-      color: white;
-
-      &:hover {
-        background: #d97706;
-      }
-    }
-
-    .btn-delete {
-      background: #ef4444;
-      color: white;
-
-      &:hover {
-        background: #dc2626;
-      }
     }
 
     .empty-state {
