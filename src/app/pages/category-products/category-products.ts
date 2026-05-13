@@ -29,6 +29,7 @@ export class CategoryProducts {
       )
       .subscribe((categoryId) => {
         if (categoryId) {
+          console.log(categoryId);
           this.store.loadProducts(categoryId);
         }
       });

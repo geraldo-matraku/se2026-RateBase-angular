@@ -1,3 +1,13 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f7fb;
+}
+
 .register_span {
   cursor: pointer;
   color: blue;
@@ -17,7 +27,6 @@ a:active {
   margin-top: 30px;
 }
 
-/* Stilimi i përgjithshëm për butonat që të duken "Premium" */
 .btn-edit,
 .btn-delete {
   display: inline-flex;
@@ -45,7 +54,6 @@ a:active {
   }
 }
 
-/* Butoni EDIT - Blue/Neon Glow */
 .btn-edit {
   background: linear-gradient(135deg, rgba(58, 123, 213, 0.2), rgba(0, 210, 255, 0.2));
   color: #5cc9ff;
@@ -60,7 +68,6 @@ a:active {
   }
 }
 
-/* Butoni DELETE - Red/Rose Aesthetic */
 .btn-delete {
   background: linear-gradient(135deg, rgba(235, 51, 73, 0.15), rgba(244, 92, 67, 0.15));
   color: #ff6b6b;
@@ -75,7 +82,6 @@ a:active {
   }
 }
 
-/* Opsionale: Efekti i shkëlqimit që kalon mbi buton kur i bën hover */
 .btn-edit::after,
 .btn-delete::after {
   content: '';
@@ -99,7 +105,6 @@ a:active {
   gap: 8px;
   padding: 10px 20px;
 
-  // Background Blu Solid/Gradient
   background: linear-gradient(135deg, #3f51b5, #1a237e);
   color: #ffffff;
 
@@ -117,7 +122,6 @@ a:active {
   }
 
   &:hover {
-    // Një blu pak më e hapur në hover
     background: linear-gradient(135deg, #5c6bc0, #283593);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(26, 35, 126, 0.4);
@@ -127,4 +131,8 @@ a:active {
     transform: translateY(0);
     filter: brightness(0.9);
   }
+}
+
+.small_product_img {
+  width: 50px;
 }

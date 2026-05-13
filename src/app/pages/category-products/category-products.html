@@ -7,7 +7,7 @@
         <strong>{{ (store.products$ | async)?.[0]?.category_name || '...' }}</strong>
       </p>
     </div>
-    <button class="add-product-btn" *appRoleDirective="'admin'">
+    <button class="add-product-btn" *appHasRole="'admin'">
       <i class="material-icons">add</i>
       Produkt i ri
     </button>
@@ -51,12 +51,16 @@
             </div>
 
             <div class="action_container">
-              <a [routerLink]="[prod.product_id]" class="product_btn">Shiko Produktin</a>
-              <button class="btn-edit" *appRoleDirective="'admin'">
-                <i class="material-icons">edit</i>Edit
+              <a
+                [routerLink]="['/categories', prod.category_id, prod.product_id]"
+                class="product_btn"
+                >Shiko Produktin</a
+              >
+              <button class="btn-edit" *appHasRole="'admin'">
+                <i class="material-icons">edit</i>
               </button>
-              <button class="btn-delete" *appRoleDirective="'admin'">
-                <i class="material-icons">delete_sweep</i>Delete
+              <button class="btn-delete" *appHasRole="'admin'">
+                <i class="material-icons">delete_sweep</i>
               </button>
             </div>
           </div>
@@ -64,7 +68,7 @@
       } @empty {
         <div class="empty-state">
           <i class="material-icons">inventory_2</i>
-          <h3>Asnjë produkt u gjet</h3>
+          <h3>Nuk u gjet asnje produkt</h3>
           <p>Nuk ka produkte të regjistruara në këtë kategori.</p>
         </div>
       }
