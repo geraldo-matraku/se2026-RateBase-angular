@@ -44,7 +44,8 @@ export const routes: Routes = [
       {
         path: 'myreviews',
         canActivate: [authGuard],
-        loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews),
+        loadComponent: () =>
+          import('./pages/reviews/my-reviews/my-reviews').then((m) => m.MyReviews),
       },
     ],
   },
