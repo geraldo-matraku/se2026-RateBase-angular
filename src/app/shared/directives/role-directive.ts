@@ -3,7 +3,7 @@ import { Input, TemplateRef, ViewContainerRef, inject, OnInit, OnDestroy } from 
 import { Subject, takeUntil } from 'rxjs';
 import { AuthStore } from '../../core/services/authStore';
 @Directive({
-  selector: '[appRoleDirective]',
+  selector: '[appHasRole]',
 })
 export class RoleDirective implements OnInit, OnDestroy {
   constructor() {}
