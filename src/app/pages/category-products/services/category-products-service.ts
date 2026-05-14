@@ -32,4 +32,16 @@ export class CategoryProductService {
       withCredentials: true,
     });
   }
+
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`${environments.apiUrl}products/${id}`, {
+      withCredentials: true,
+    });
+  }
+
+  updateProduct(id: number, formData: FormData): Observable<any> {
+    return this.http.post(`${environments.apiUrl}products/${id}`, formData, {
+      withCredentials: true,
+    });
+  }
 }

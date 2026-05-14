@@ -1,9 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CategoryProductStore } from './store/category-products-store';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+  FormGroup,
+} from '@angular/forms';
 import { CategoriesService } from '../categories/services/categoriesService';
 import { Spinner } from '../../shared/spinner/spinner';
 import { RouterLink } from '@angular/router';
@@ -16,7 +22,7 @@ import { RoleDirective } from '../../shared/directives/role-directive';
   templateUrl: './category-products.html',
   styleUrl: './category-products.scss',
 })
-export class CategoryProducts {
+export class CategoryProducts implements OnInit {
   store = inject(CategoryProductStore);
   route = inject(ActivatedRoute);
   categoriesService = inject(CategoriesService);
@@ -26,14 +32,24 @@ export class CategoryProducts {
 
   searchParam: string = '';
   categoryId!: number;
-
-  // MODAL
-  showCreateModal = false;
   selectedFile: File | null = null;
+
+  showCreateModal = false;
 
   productForm = this.fb.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
+  });
+
+  showDeleteModal = false;
+  productToDelete: { id: number; name: string } | null = null;
+
+  showEditModal = false;
+  selectedProductId: number | null = null;
+
+  productEditForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required]],
   });
 
   ngOnInit() {
@@ -43,25 +59,17 @@ export class CategoryProducts {
         tap((id) => (this.categoryId = id)),
       )
       .subscribe((id) => {
-        if (id) {
-          this.store.loadProducts(id);
-        }
+        if (id) this.store.loadProducts(id);
       });
   }
 
-  onSearchChange(val: string) {
-    // if (!val) {
-    // this.store.loadProducts(this.categoryId);
-    // return;
+  onFileSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) this.selectedFile = file;
   }
 
-  //   this.store.searchProducts({
-  //     categoryId: this.categoryId,
-  //     query: val,
-  //   });
-  // }
+  onSearchChange(val: string) {}
 
-  // OPEN MODAL
   openCreateModal() {
     this.showCreateModal = true;
   }
@@ -72,34 +80,64 @@ export class CategoryProducts {
     this.selectedFile = null;
   }
 
-  // FILE
-  onFileSelect(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-    }
-  }
-
-  // SUBMIT CREATE
   onCreateSubmit() {
     if (this.productForm.invalid) return;
 
     const formData = new FormData();
-
     formData.append('name', this.productForm.value.name!);
     formData.append('description', this.productForm.value.description!);
     formData.append('category_id', String(this.categoryId));
-
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
+    if (this.selectedFile) formData.append('image', this.selectedFile);
 
     this.store.createProduct(formData);
     this.closeCreateModal();
   }
 
-  deleteProduct(id: number) {
-    console.log(id);
-    // this.store.deleteProduct(id);
+  openDeleteModal(id: number, name: string) {
+    this.productToDelete = { id, name };
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.productToDelete = null;
+  }
+
+  confirmDelete() {
+    if (this.productToDelete) {
+      this.store.deleteProduct(this.productToDelete.id);
+      this.closeDeleteModal();
+    }
+  }
+
+  openEditModal(product: any) {
+    this.selectedProductId = product.product_id;
+    this.productEditForm.patchValue({
+      name: product.name,
+      description: product.description,
+    });
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+    this.selectedProductId = null;
+    this.selectedFile = null;
+    this.productEditForm.reset();
+  }
+
+  onEditSubmit() {
+    if (!this.selectedProductId || this.productEditForm.invalid) return;
+
+    const formData = new FormData();
+    const name = this.productEditForm.get('name')?.value;
+    const description = this.productEditForm.get('description')?.value;
+
+    if (name) formData.append('name', name);
+    if (description) formData.append('description', description);
+    if (this.selectedFile) formData.append('image', this.selectedFile);
+
+    this.store.updateProduct({ id: this.selectedProductId, formData });
+    this.closeEditModal();
   }
 }

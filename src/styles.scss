@@ -341,3 +341,20 @@ a:active {
     box-shadow: 0 6px 14px rgba(24, 95, 165, 0.25);
   }
 }
+
+.star-picker {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+
+  .star-pick {
+    font-size: 28px;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &.active {
+      color: #f59e0b;
+    }
+  }
+}

@@ -55,10 +55,14 @@
                 class="product_btn"
                 >Shiko Produktin</a
               >
-              <button class="btn-edit" *appHasRole="'admin'">
+              <button class="btn-edit" *appHasRole="'admin'" (click)="openEditModal(prod)">
                 <i class="material-icons">edit</i>
               </button>
-              <button class="btn-delete" *appHasRole="'admin'">
+              <button
+                class="btn-delete"
+                *appHasRole="'admin'"
+                (click)="openDeleteModal(prod.product_id, prod.name)"
+              >
                 <i class="material-icons">delete_sweep</i>
               </button>
             </div>
@@ -114,7 +118,6 @@
           }
         </div>
 
-        <!-- DESCRIPTION -->
         <div class="cat-form-group">
           <label class="cat-form-label">Pershkrimi</label>
 
@@ -163,7 +166,6 @@
     </div>
   </div>
 }
-<!-- 
 @if (showDeleteModal) {
   <div class="cat-modal-overlay">
     <div class="cat-modal-container">
@@ -174,8 +176,8 @@
 
       <div class="cat-modal-form">
         <p style="color: #475569; margin-bottom: 20px">
-          A jeni i sigurt qe deshironi te fshini kategorine
-          <strong style="color: #111827">"{{ categoryToDelete?.name }}"</strong>? Ky veprim nuk mund
+          A jeni i sigurt qe deshironi te fshini produktin
+          <strong style="color: #111827">"{{ productToDelete?.name }}"</strong>? Ky veprim nuk mund
           te kthehet mbrapa.
         </p>
 
@@ -187,16 +189,85 @@
             type="button"
             class="cat-btn-danger"
             (click)="confirmDelete()"
-            [disabled]="categoriesStore.loading$ | async"
+            [disabled]="store.loading$ | async"
           >
-            @if (categoriesStore.loading$ | async) {
+            @if (store.loading$ | async) {
               Duke u fshire...
             } @else {
-              Fshij Kategorine
+              Fshij Produktin
             }
           </button>
         </div>
       </div>
     </div>
   </div>
-} -->
+}
+@if (showEditModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Edito Produktin</h3>
+        <button class="cat-modal-close-x" (click)="closeEditModal()">×</button>
+      </div>
+
+      <form [formGroup]="productEditForm" (ngSubmit)="onEditSubmit()" class="cat-modal-form">
+        <div class="cat-form-group">
+          <label class="cat-form-label">Emri i Produktit</label>
+          <input
+            type="text"
+            formControlName="name"
+            class="cat-form-input"
+            [class.cat-input-error]="
+              productEditForm.get('name')?.invalid && productEditForm.get('name')?.touched
+            "
+          />
+          @if (productEditForm.get('name')?.invalid && productEditForm.get('name')?.touched) {
+            <div class="cat-error-wrapper">
+              @if (productEditForm.get('name')?.errors?.['required']) {
+                <small class="cat-error-text">Emri eshte i detyrueshem.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="cat-form-group">
+          <label class="cat-form-label">Pershkrimi</label>
+          <textarea
+            formControlName="description"
+            rows="3"
+            class="cat-form-textarea"
+            [class.cat-input-error]="
+              productEditForm.get('description')?.invalid &&
+              productEditForm.get('description')?.touched
+            "
+          ></textarea>
+        </div>
+
+        <div class="cat-form-group">
+          <label class="cat-form-label">Imazhi i Ri</label>
+          <input
+            type="file"
+            (change)="onFileSelect($event)"
+            accept="image/*"
+            class="cat-file-input"
+          />
+        </div>
+
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeEditModal()">Anulo</button>
+          <button
+            type="submit"
+            class="cat-btn-primary"
+            [disabled]="productEditForm.invalid || (store.loading$ | async)"
+          >
+            @if (store.loading$ | async) {
+              Duke u ruajtur...
+            } @else {
+              Ruaj Ndryshimet
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

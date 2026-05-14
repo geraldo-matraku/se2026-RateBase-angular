@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { catchError, EMPTY, pipe, switchMap, tap, map, delay } from 'rxjs'; // Shtuar 'map'
+import { catchError, EMPTY, pipe, switchMap, tap, map, delay } from 'rxjs';
 import {
   CategoryProductService,
   CreateProductPayload,
@@ -21,12 +21,10 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
     super({ products: [], loading: false, error: null });
   }
 
-  // SELECTORS
   readonly products$ = this.select((state) => state.products);
   readonly loading$ = this.select((state) => state.loading);
   readonly error$ = this.select((state) => state.error);
 
-  // UPDATERS
   readonly setProducts = this.updater((state, products: Product[]) => ({
     ...state,
     products,
@@ -45,7 +43,6 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
     loading: false,
   }));
 
-  // EFFECTS
   readonly loadProducts = this.effect<number>(
     pipe(
       tap(() => {
@@ -91,7 +88,6 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             next: () => {
               this.patchState({ loading: false });
 
-              // reload products after create
               const categoryId = this.get().products?.[0]?.category_id;
               if (categoryId) {
                 this.loadProducts(categoryId);
@@ -105,6 +101,53 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             },
           }),
           catchError(() => EMPTY),
+        ),
+      ),
+    ),
+  );
+  readonly deleteProduct = this.effect<number>(
+    pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap((productId) =>
+        this.categoryProductsService.deleteProduct(productId).pipe(
+          tap(() => {
+            const categoryId = this.get().products?.[0]?.category_id;
+            if (categoryId) {
+              this.loadProducts(categoryId);
+            }
+          }),
+          catchError((err) => {
+            console.error('Gabimi gjate fshirjes se produktit:', err);
+            this.patchState({
+              loading: false,
+              error: err.error?.message || 'Fshirja deshtoi. Provoni perseri.',
+            });
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
+  readonly updateProduct = this.effect<{ id: number; formData: FormData }>(
+    pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap(({ id, formData }) =>
+        this.categoryProductsService.updateProduct(id, formData).pipe(
+          tap(() => {
+            const categoryId = this.get().products?.[0]?.category_id;
+            if (categoryId) {
+              this.loadProducts(categoryId);
+            }
+          }),
+          catchError((err) => {
+            console.error('Gabimi gjate updateit te produktit:', err);
+            this.patchState({
+              loading: false,
+              error: err.error?.message || 'Perditesimi deshtoi. Provoni perseri.',
+            });
+            return EMPTY;
+          }),
         ),
       ),
     ),

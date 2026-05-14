@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { forkJoin, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, forkJoin, pipe, switchMap, tap } from 'rxjs';
 
 import { ProductDetailsService } from '../services/product-details-service';
 import { ReviewsService } from '../../reviews/services/reviews-service';
@@ -64,6 +64,33 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
               });
             },
           }),
+        ),
+      ),
+    ),
+  );
+
+  readonly createReview = this.effect<{
+    product_id: number;
+    rating: number;
+    comment: string;
+    image?: string;
+  }>(
+    pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap((payload) =>
+        this.productService.createReview(payload).pipe(
+          tap({
+            next: () => {
+              this.fetchProductDetails(payload.product_id);
+            },
+            error: (err) => {
+              this.patchState({
+                loading: false,
+                error: err.error?.message || 'Krijimi i reviews deshtoi.',
+              });
+            },
+          }),
+          catchError(() => EMPTY),
         ),
       ),
     ),
