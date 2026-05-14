@@ -13,11 +13,23 @@ export interface Product {
   category_name: string;
 }
 
+export interface CreateProductPayload {
+  name: string;
+  description: string;
+  image: File;
+  category_id: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CategoryProductService {
   private http = inject(HttpClient);
 
   getProductsByCategory(categoryId: number): Observable<Product[]> {
     return this.http.get<Product[]>(`${environments.apiUrl}products/getByCategory/${categoryId}`);
+  }
+  createProduct(formData: FormData) {
+    return this.http.post(`${environments.apiUrl}products/create`, formData, {
+      withCredentials: true,
+    });
   }
 }
