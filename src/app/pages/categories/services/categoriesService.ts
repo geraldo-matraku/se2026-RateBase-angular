@@ -35,12 +35,20 @@ export class CategoriesService {
   }
   createCategory(formData: FormData): Observable<any> {
     return this.http.post(`${environments.apiUrl}categories/create`, formData, {
-      withCredentials: true, // Rëndësishme për të dërguar session-in
+      withCredentials: true,
     });
   }
 
   deleteCategory(id: number): Observable<any> {
     return this.http.delete(`${environments.apiUrl}categories/${id}`, {
+      withCredentials: true,
+    });
+  }
+
+  updateCategory(id: number, formData: FormData) {
+    formData.append('_method', 'PUT');
+
+    return this.http.post<any>(`${environments.apiUrl}categories/${id}`, formData, {
       withCredentials: true,
     });
   }

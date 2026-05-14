@@ -54,25 +54,6 @@ import { RoleDirective } from '../../shared/directives/role-directive';
       }
     }
 
-    .add-btn {
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 10px;
-      border: none;
-      background: #185fa5;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: #134a82;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(24, 95, 165, 0.25);
-      }
-    }
-
     .toolbar {
       margin-bottom: 24px;
     }
@@ -236,6 +217,9 @@ import { RoleDirective } from '../../shared/directives/role-directive';
 export class CategoriesComponent implements OnInit {
   authStore = inject(AuthStore);
 
+  showEditModal = false;
+  selectedCategoryId: number | null = null;
+
   searchParam: string | null = null;
   categoriesStore = inject(CategoriesStore);
   categoriesService = inject(CategoriesService);
@@ -306,5 +290,52 @@ export class CategoriesComponent implements OnInit {
       this.categoriesStore.deleteCategory(this.categoryToDelete.id);
       this.closeDeleteModal();
     }
+  }
+
+  openEditModal(category: any) {
+    this.selectedCategoryId = category.category_id;
+
+    this.categoryForm.patchValue({
+      name: category.name,
+      description: category.description,
+    });
+
+    this.showEditModal = true;
+  }
+  onEditSubmit() {
+    if (!this.selectedCategoryId) return;
+
+    const formData = new FormData();
+
+    const name = this.categoryForm.get('name')?.value;
+    const description = this.categoryForm.get('description')?.value;
+
+    if (name) {
+      formData.append('name', name);
+    }
+
+    if (description) {
+      formData.append('description', description);
+    }
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+
+    this.categoriesStore.editCategory({
+      id: this.selectedCategoryId,
+      formData,
+    });
+
+    this.closeEditModal();
+  }
+  closeEditModal() {
+    this.showEditModal = false;
+
+    this.selectedCategoryId = null;
+
+    this.selectedFile = null;
+
+    this.categoryForm.reset();
   }
 }

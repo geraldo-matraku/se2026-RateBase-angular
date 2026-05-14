@@ -1,14 +1,12 @@
 <div class="categories-page">
-  <!-- Statistikat në krye -->
   <app-stats></app-stats>
 
   <div class="header">
     <div>
-      <h2>Kategoritë</h2>
-      <p>Menaxho kategoritë e produkteve</p>
+      <h2>Kategorite</h2>
+      <p>Menaxho kategorite e produkteve</p>
     </div>
 
-    <!-- Butoni që hap modalin e krijimit -->
     <button class="add-btn" *appHasRole="'admin'" (click)="showModal = true">
       + Kategori e re
     </button>
@@ -26,7 +24,6 @@
     </div>
   </div>
 
-  <!-- Lista e Kategorive -->
   @if (categoriesStore.loading$ | async) {
     <app-spinner></app-spinner>
   } @else {
@@ -56,12 +53,11 @@
               Shiko Kategorine
             </a>
             <div *appHasRole="'admin'">
-              <button class="btn-edit">
+              <button class="btn-edit" (click)="openEditModal(cat)">
                 <i class="material-icons">edit</i>
               </button>
             </div>
             <div *appHasRole="'admin'">
-              <!-- PERDITESIMI: Thirrja e modalit te fshirjes -->
               <button class="btn-delete" (click)="openDeleteModal(cat.category_id, cat.name)">
                 <i class="material-icons">delete_sweep</i>
               </button>
@@ -69,30 +65,28 @@
           </div>
         </div>
       } @empty {
-        <div class="empty-state">Nuk u gjet asnjë kategori.</div>
+        <div class="empty-state">Nuk u gjet asnje kategori.</div>
       }
     </div>
   }
 
-  <!-- Error Message -->
   @if (categoriesStore.error$ | async; as error) {
     <div class="error-msg">
       {{ error }}
     </div>
   }
 
-  <!-- MODAL PËR KRIJIMIN E KATEGORISË -->
   @if (showModal) {
     <div class="cat-modal-overlay">
       <div class="cat-modal-container">
         <div class="cat-modal-header">
-          <h3 class="cat-modal-title">Shto Kategori të Re</h3>
+          <h3 class="cat-modal-title">Shto Kategori te Re</h3>
           <button class="cat-modal-close-x" (click)="closeModal()">×</button>
         </div>
 
         <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="cat-modal-form">
           <div class="cat-form-group">
-            <label class="cat-form-label">Emri i Kategorisë</label>
+            <label class="cat-form-label">Emri i Kategorise</label>
             <input
               type="text"
               formControlName="name"
@@ -105,18 +99,18 @@
             @if (categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched) {
               <div class="cat-error-wrapper">
                 @if (categoryForm.get('name')?.errors?.['required']) {
-                  <small class="cat-error-text">Emri është i detyrueshëm.</small>
+                  <small class="cat-error-text">Emri eshte i detyrueshem.</small>
                 }
               </div>
             }
           </div>
 
           <div class="cat-form-group">
-            <label class="cat-form-label">Përshkrimi</label>
+            <label class="cat-form-label">Pershkrimi</label>
             <textarea
               formControlName="description"
               rows="3"
-              placeholder="Përshkrim i shkurtër..."
+              placeholder="Pershkrim i shkurter..."
               class="cat-form-textarea"
               [class.cat-input-error]="
                 categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched
@@ -125,7 +119,7 @@
           </div>
 
           <div class="cat-form-group">
-            <label class="cat-form-label">Imazhi i Kategorisë</label>
+            <label class="cat-form-label">Imazhi i Kategorise</label>
             <input
               type="file"
               (change)="onFileSelect($event)"
@@ -144,6 +138,50 @@
       </div>
     </div>
   }
+  @if (showEditModal) {
+    <div class="cat-modal-overlay">
+      <div class="cat-modal-container">
+        <div class="cat-modal-header">
+          <h3 class="cat-modal-title">Edito Kategorine</h3>
+
+          <button class="cat-modal-close-x" (click)="closeEditModal()">×</button>
+        </div>
+
+        <form [formGroup]="categoryForm" (ngSubmit)="onEditSubmit()" class="cat-modal-form">
+          <div class="cat-form-group">
+            <label class="cat-form-label">Emri i Kategorise</label>
+
+            <input type="text" formControlName="name" class="cat-form-input" />
+          </div>
+
+          <div class="cat-form-group">
+            <label class="cat-form-label">Pershkrimi</label>
+
+            <textarea formControlName="description" rows="3" class="cat-form-textarea"></textarea>
+          </div>
+
+          <div class="cat-form-group">
+            <label class="cat-form-label">Imazhi i Ri</label>
+
+            <input
+              type="file"
+              (change)="onFileSelect($event)"
+              accept="image/*"
+              class="cat-file-input"
+            />
+          </div>
+
+          <div class="cat-modal-footer-actions">
+            <button type="button" class="cat-btn-secondary" (click)="closeEditModal()">
+              Anulo
+            </button>
+
+            <button type="submit" class="cat-btn-primary">Ruaj Ndryshimet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
 
   @if (showDeleteModal) {
     <div class="cat-modal-overlay">
@@ -155,9 +193,9 @@
 
         <div class="cat-modal-form">
           <p style="color: #475569; margin-bottom: 20px">
-            A jeni i sigurt që dëshironi të fshini kategorinë
+            A jeni i sigurt qe deshironi te fshini kategorine
             <strong style="color: #111827">"{{ categoryToDelete?.name }}"</strong>? Ky veprim nuk
-            mund të kthehet mbrapa.
+            mund te kthehet mbrapa.
           </p>
 
           <div class="cat-modal-footer-actions">
@@ -171,9 +209,9 @@
               [disabled]="categoriesStore.loading$ | async"
             >
               @if (categoriesStore.loading$ | async) {
-                Duke u fshirë...
+                Duke u fshire...
               } @else {
-                Fshij Kategorinë
+                Fshij Kategorine
               }
             </button>
           </div>

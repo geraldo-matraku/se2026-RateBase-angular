@@ -1,7 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { catchError, EMPTY, pipe, switchMap, tap, map, delay } from 'rxjs'; // Shtuar 'map'
-import { CategoryProductService, Product } from '../services/category-products-service';
+import {
+  CategoryProductService,
+  CreateProductPayload,
+  Product,
+} from '../services/category-products-service';
 
 interface ProductState {
   products: Product[];
@@ -45,7 +49,6 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
   readonly loadProducts = this.effect<number>(
     pipe(
       tap(() => {
-        // Resetohet gjendja para ngarkimit të ri
         this.patchState({ loading: true, error: null, products: [] });
       }),
       switchMap((categoryId) =>
@@ -55,7 +58,6 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             if (Array.isArray(res)) {
               return res;
             } else if (res && typeof res === 'object') {
-              // Nëse API kthen { data: [...] } ose { products: [...] }
               return (
                 res.data || res.products || Object.values(res).find((v) => Array.isArray(v)) || []
               );
@@ -66,7 +68,7 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             this.patchState({ products, loading: false });
           }),
           catchError((error) => {
-            console.error('Gabimi gjatë marrjes së produkteve:', error);
+            console.error('Gabimi gjate marrjes se produkteve:', error);
             this.patchState({
               error: 'Nuk u ngarkuan produktet. Kontrolloni lidhjen me serverin.',
               loading: false,
@@ -74,6 +76,35 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             });
             return EMPTY;
           }),
+        ),
+      ),
+    ),
+  );
+
+  readonly createProduct = this.effect((formData$: any) =>
+    formData$.pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+
+      switchMap((formData: FormData) =>
+        this.categoryProductsService.createProduct(formData).pipe(
+          tap({
+            next: () => {
+              this.patchState({ loading: false });
+
+              // reload products after create
+              const categoryId = this.get().products?.[0]?.category_id;
+              if (categoryId) {
+                this.loadProducts(categoryId);
+              }
+            },
+            error: (err) => {
+              this.patchState({
+                loading: false,
+                error: err.error?.message || 'Create failed',
+              });
+            },
+          }),
+          catchError(() => EMPTY),
         ),
       ),
     ),

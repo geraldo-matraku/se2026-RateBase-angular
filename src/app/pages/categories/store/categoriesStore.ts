@@ -88,7 +88,7 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
               this.loadCategories();
             },
             error: (err) => {
-              const errorMessage = err.error?.message || 'Gabim gjatë krijimit të kategorisë';
+              const errorMessage = err.error?.message || 'Gabim gjate krijimit te kategorise';
               this.patchState({ error: errorMessage, loading: false });
             },
           }),
@@ -135,8 +135,34 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
               this.loadCategories();
             },
             error: (err) => {
-              const errorMessage = err.error?.message || 'Gabim gjatë fshirjes së kategorisë';
+              const errorMessage = err.error?.message || 'Gabim gjate fshirjes se kategorise';
               this.patchState({ error: errorMessage, loading: false });
+            },
+          }),
+          catchError(() => EMPTY),
+        ),
+      ),
+    );
+  });
+
+  readonly editCategory = this.effect((data$: Observable<{ id: number; formData: FormData }>) => {
+    return data$.pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+
+      switchMap(({ id, formData }) =>
+        this.categoriesService.updateCategory(id, formData).pipe(
+          tap({
+            next: () => {
+              this.patchState({ loading: false });
+              this.loadCategories();
+            },
+            error: (err) => {
+              const errorMessage = err.error?.message || 'Gabim gjate editimit te kategorise';
+
+              this.patchState({
+                error: errorMessage,
+                loading: false,
+              });
             },
           }),
           catchError(() => EMPTY),

@@ -3,13 +3,12 @@
     <div class="title-section">
       <h2>Produktet</h2>
       <p>
-        Duke parë produktet për kategorinë:
+        Duke pare produktet per kategorine:
         <strong>{{ (store.products$ | async)?.[0]?.category_name || '...' }}</strong>
       </p>
     </div>
-    <button class="add-product-btn" *appHasRole="'admin'">
-      <i class="material-icons">add</i>
-      Produkt i ri
+    <button class="add-btn" *appHasRole="'admin'" (click)="openCreateModal()">
+      + Produkt i ri
     </button>
   </div>
 
@@ -20,7 +19,7 @@
         type="text"
         [(ngModel)]="searchParam"
         (ngModelChange)="onSearchChange($event)"
-        placeholder="Kërko me emër ose përshkrim..."
+        placeholder="Kerko me emer ose pershkrim..."
       />
     </div>
   </div>
@@ -69,7 +68,7 @@
         <div class="empty-state">
           <i class="material-icons">inventory_2</i>
           <h3>Nuk u gjet asnje produkt</h3>
-          <p>Nuk ka produkte të regjistruara në këtë kategori.</p>
+          <p>Nuk ka produkte te regjistruara ne kete kategori.</p>
         </div>
       }
     </div>
@@ -82,3 +81,122 @@
     </div>
   }
 </div>
+
+@if (showCreateModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Shto Produkt te Ri</h3>
+        <button class="cat-modal-close-x" (click)="closeCreateModal()">×</button>
+      </div>
+
+      <form [formGroup]="productForm" (ngSubmit)="onCreateSubmit()" class="cat-modal-form">
+        <!-- NAME -->
+        <div class="cat-form-group">
+          <label class="cat-form-label">Emri i Produktit</label>
+
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Shkruaj emrin..."
+            class="cat-form-input"
+            [class.cat-input-error]="
+              productForm.get('name')?.invalid && productForm.get('name')?.touched
+            "
+          />
+
+          @if (productForm.get('name')?.invalid && productForm.get('name')?.touched) {
+            <div class="cat-error-wrapper">
+              @if (productForm.get('name')?.errors?.['required']) {
+                <small class="cat-error-text"> Emri eshte i detyrueshem. </small>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="cat-form-group">
+          <label class="cat-form-label">Pershkrimi</label>
+
+          <textarea
+            formControlName="description"
+            rows="3"
+            placeholder="Pershkrim i shkurter..."
+            class="cat-form-textarea"
+            [class.cat-input-error]="
+              productForm.get('description')?.invalid && productForm.get('description')?.touched
+            "
+          ></textarea>
+
+          @if (productForm.get('description')?.invalid && productForm.get('description')?.touched) {
+            <div class="cat-error-wrapper">
+              @if (productForm.get('description')?.errors?.['required']) {
+                <small class="cat-error-text"> Pershkrimi eshte i detyrueshem. </small>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- IMAGE -->
+        <div class="cat-form-group">
+          <label class="cat-form-label">Imazhi (opsional)</label>
+
+          <input
+            type="file"
+            (change)="onFileSelect($event)"
+            accept="image/*"
+            class="cat-file-input"
+          />
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeCreateModal()">
+            Anulo
+          </button>
+
+          <button type="submit" class="cat-btn-primary" [disabled]="productForm.invalid">
+            Krijo Produkt
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+<!-- 
+@if (showDeleteModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Konfirmo Fshirjen</h3>
+        <button class="cat-modal-close-x" (click)="closeDeleteModal()">×</button>
+      </div>
+
+      <div class="cat-modal-form">
+        <p style="color: #475569; margin-bottom: 20px">
+          A jeni i sigurt qe deshironi te fshini kategorine
+          <strong style="color: #111827">"{{ categoryToDelete?.name }}"</strong>? Ky veprim nuk mund
+          te kthehet mbrapa.
+        </p>
+
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeDeleteModal()">
+            Anulo
+          </button>
+          <button
+            type="button"
+            class="cat-btn-danger"
+            (click)="confirmDelete()"
+            [disabled]="categoriesStore.loading$ | async"
+          >
+            @if (categoriesStore.loading$ | async) {
+              Duke u fshire...
+            } @else {
+              Fshij Kategorine
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+} -->
