@@ -3,7 +3,13 @@ import { AuthStore } from '../../core/services/authStore';
 import { CategoriesStore } from './store/categoriesStore';
 import { CategoriesService } from './services/categoriesService';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { StatsComponent } from '../../shared/stats/stats';
 import { RouterLink } from '@angular/router';
 import { Spinner } from '../../shared/spinner/spinner';
@@ -11,7 +17,15 @@ import { RoleDirective } from '../../shared/directives/role-directive';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule, StatsComponent, RouterLink, Spinner, RoleDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    StatsComponent,
+    RouterLink,
+    Spinner,
+    RoleDirective,
+    ReactiveFormsModule,
+  ],
   templateUrl: './categories.html',
   styles: `
     .categories-page {
@@ -227,6 +241,10 @@ export class CategoriesComponent implements OnInit {
   categoriesService = inject(CategoriesService);
   imgBase = this.categoriesService.uploadUrl;
 
+  private fb = inject(FormBuilder);
+  showModal = false;
+  selectedFile: File | null = null;
+
   ngOnInit() {
     this.categoriesStore.loadCategories();
   }
@@ -237,5 +255,56 @@ export class CategoriesComponent implements OnInit {
 
   onLogout() {
     this.authStore.logout();
+  }
+
+  categoryForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required]],
+  });
+
+  onFileSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+  onSubmit() {
+    if (this.categoryForm.valid) {
+      const formData = new FormData();
+      formData.append('name', this.categoryForm.value.name);
+      formData.append('description', this.categoryForm.value.description);
+      if (this.selectedFile) {
+        formData.append('image', this.selectedFile);
+      }
+
+      this.categoriesStore.addCategory(formData);
+      this.closeModal();
+    }
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.categoryForm.reset();
+    this.selectedFile = null;
+  }
+  showDeleteModal = false;
+  categoryToDelete: { id: number; name: string } | null = null;
+
+  openDeleteModal(id: number, name: string) {
+    this.categoryToDelete = { id, name };
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.categoryToDelete = null;
+  }
+
+  confirmDelete() {
+    if (this.categoryToDelete) {
+      this.categoriesStore.deleteCategory(this.categoryToDelete.id);
+      this.closeDeleteModal();
+    }
   }
 }

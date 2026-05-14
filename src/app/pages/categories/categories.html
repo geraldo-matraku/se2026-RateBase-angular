@@ -1,4 +1,5 @@
 <div class="categories-page">
+  <!-- Statistikat në krye -->
   <app-stats></app-stats>
 
   <div class="header">
@@ -7,13 +8,15 @@
       <p>Menaxho kategoritë e produkteve</p>
     </div>
 
-    <button class="add-btn" *appHasRole="'admin'">+ Kategori e re</button>
+    <!-- Butoni që hap modalin e krijimit -->
+    <button class="add-btn" *appHasRole="'admin'" (click)="showModal = true">
+      + Kategori e re
+    </button>
   </div>
 
   <div class="toolbar">
     <div class="search-box">
       <i class="material-icons">search</i>
-
       <input
         type="text"
         [(ngModel)]="searchParam"
@@ -23,13 +26,13 @@
     </div>
   </div>
 
+  <!-- Lista e Kategorive -->
   @if (categoriesStore.loading$ | async) {
     <app-spinner></app-spinner>
   } @else {
     <div class="categories-grid">
       @for (cat of categoriesStore.categories$ | async; track cat.category_id) {
         <div class="card">
-          <!-- TOP -->
           <div class="category-card">
             <div class="category-image">
               <img
@@ -41,16 +44,13 @@
 
             <div class="content">
               <div class="title">{{ cat.name }}</div>
-
               <div class="count">{{ cat.total_products || 0 }} produkte</div>
-
               <div class="description">
                 {{ cat.description }}
               </div>
             </div>
           </div>
 
-          <!-- BOTTOM -->
           <div class="action_container">
             <a [routerLink]="['/categories', cat.category_id]" class="product_btn">
               Shiko Kategorine
@@ -61,7 +61,8 @@
               </button>
             </div>
             <div *appHasRole="'admin'">
-              <button class="btn-delete">
+              <!-- PERDITESIMI: Thirrja e modalit te fshirjes -->
+              <button class="btn-delete" (click)="openDeleteModal(cat.category_id, cat.name)">
                 <i class="material-icons">delete_sweep</i>
               </button>
             </div>
@@ -73,9 +74,111 @@
     </div>
   }
 
+  <!-- Error Message -->
   @if (categoriesStore.error$ | async; as error) {
     <div class="error-msg">
       {{ error }}
+    </div>
+  }
+
+  <!-- MODAL PËR KRIJIMIN E KATEGORISË -->
+  @if (showModal) {
+    <div class="cat-modal-overlay">
+      <div class="cat-modal-container">
+        <div class="cat-modal-header">
+          <h3 class="cat-modal-title">Shto Kategori të Re</h3>
+          <button class="cat-modal-close-x" (click)="closeModal()">×</button>
+        </div>
+
+        <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="cat-modal-form">
+          <div class="cat-form-group">
+            <label class="cat-form-label">Emri i Kategorisë</label>
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Shkruaj emrin..."
+              class="cat-form-input"
+              [class.cat-input-error]="
+                categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched
+              "
+            />
+            @if (categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched) {
+              <div class="cat-error-wrapper">
+                @if (categoryForm.get('name')?.errors?.['required']) {
+                  <small class="cat-error-text">Emri është i detyrueshëm.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="cat-form-group">
+            <label class="cat-form-label">Përshkrimi</label>
+            <textarea
+              formControlName="description"
+              rows="3"
+              placeholder="Përshkrim i shkurtër..."
+              class="cat-form-textarea"
+              [class.cat-input-error]="
+                categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched
+              "
+            ></textarea>
+          </div>
+
+          <div class="cat-form-group">
+            <label class="cat-form-label">Imazhi i Kategorisë</label>
+            <input
+              type="file"
+              (change)="onFileSelect($event)"
+              accept="image/*"
+              class="cat-file-input"
+            />
+          </div>
+
+          <div class="cat-modal-footer-actions">
+            <button type="button" class="cat-btn-secondary" (click)="closeModal()">Anulo</button>
+            <button type="submit" class="cat-btn-primary" [disabled]="categoryForm.invalid">
+              Krijo Kategori
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (showDeleteModal) {
+    <div class="cat-modal-overlay">
+      <div class="cat-modal-container">
+        <div class="cat-modal-header">
+          <h3 class="cat-modal-title">Konfirmo Fshirjen</h3>
+          <button class="cat-modal-close-x" (click)="closeDeleteModal()">×</button>
+        </div>
+
+        <div class="cat-modal-form">
+          <p style="color: #475569; margin-bottom: 20px">
+            A jeni i sigurt që dëshironi të fshini kategorinë
+            <strong style="color: #111827">"{{ categoryToDelete?.name }}"</strong>? Ky veprim nuk
+            mund të kthehet mbrapa.
+          </p>
+
+          <div class="cat-modal-footer-actions">
+            <button type="button" class="cat-btn-secondary" (click)="closeDeleteModal()">
+              Anulo
+            </button>
+            <button
+              type="button"
+              class="cat-btn-danger"
+              (click)="confirmDelete()"
+              [disabled]="categoriesStore.loading$ | async"
+            >
+              @if (categoriesStore.loading$ | async) {
+                Duke u fshirë...
+              } @else {
+                Fshij Kategorinë
+              }
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   }
 </div>

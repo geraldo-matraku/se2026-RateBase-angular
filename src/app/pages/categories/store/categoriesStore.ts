@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { CategoriesService, Category } from '../services/categoriesService';
+import { EMPTY, Observable } from 'rxjs';
 
 export interface CategoriesState {
   data: Category[];
@@ -75,6 +76,28 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
     ),
   );
 
+  readonly addCategory = this.effect((formData$: Observable<FormData>) => {
+    return formData$.pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+
+      switchMap((formData) =>
+        this.categoriesService.createCategory(formData).pipe(
+          tap({
+            next: (response) => {
+              this.patchState({ loading: false });
+              this.loadCategories();
+            },
+            error: (err) => {
+              const errorMessage = err.error?.message || 'Gabim gjatë krijimit të kategorisë';
+              this.patchState({ error: errorMessage, loading: false });
+            },
+          }),
+          catchError(() => EMPTY),
+        ),
+      ),
+    );
+  });
+
   readonly searchCategories = this.effect<string>((query$) =>
     query$.pipe(
       debounceTime(500),
@@ -101,4 +124,24 @@ export class CategoriesStore extends ComponentStore<CategoriesState> {
       ),
     ),
   );
+  readonly deleteCategory = this.effect((id$: Observable<number>) => {
+    return id$.pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap((id) =>
+        this.categoriesService.deleteCategory(id).pipe(
+          tap({
+            next: () => {
+              this.patchState({ loading: false });
+              this.loadCategories();
+            },
+            error: (err) => {
+              const errorMessage = err.error?.message || 'Gabim gjatë fshirjes së kategorisë';
+              this.patchState({ error: errorMessage, loading: false });
+            },
+          }),
+          catchError(() => EMPTY),
+        ),
+      ),
+    );
+  });
 }

@@ -21,7 +21,6 @@ export interface CategoriesResponse {
 export class CategoriesService {
   private http = inject(HttpClient);
 
-  // URL bazë për të shfaqur fotot
   public readonly uploadUrl = 'http://localhost/sistem-vleresimi-produktesh-php/uploads/';
 
   getCategories(): Observable<CategoriesResponse> {
@@ -32,6 +31,17 @@ export class CategoriesService {
     const params = new HttpParams().set('q', query);
     return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`, {
       params,
+    });
+  }
+  createCategory(formData: FormData): Observable<any> {
+    return this.http.post(`${environments.apiUrl}categories/create`, formData, {
+      withCredentials: true, // Rëndësishme për të dërguar session-in
+    });
+  }
+
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete(`${environments.apiUrl}categories/${id}`, {
+      withCredentials: true,
     });
   }
 }
