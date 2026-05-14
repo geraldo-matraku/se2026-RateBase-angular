@@ -3,16 +3,10 @@
     @if (store.product$ | async; as product) {
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <span>Produktet</span>
-
         <span class="breadcrumb__separator">›</span>
-
         <span>{{ product.category_name }}</span>
-
         <span class="breadcrumb__separator">›</span>
-
-        <span class="breadcrumb__current">
-          {{ product.name }}
-        </span>
+        <span class="breadcrumb__current">{{ product.name }}</span>
       </nav>
 
       <section class="product-summary-card">
@@ -26,46 +20,31 @@
           </div>
 
           <div class="product-summary-card__info">
-            <p class="product-summary-card__category">
-              {{ product.category_name }}
-            </p>
-
-            <h1 class="product-summary-card__title">
-              {{ product.name }}
-            </h1>
+            <p class="product-summary-card__category">{{ product.category_name }}</p>
+            <h1 class="product-summary-card__title">{{ product.name }}</h1>
 
             @if (store.reviews$ | async; as reviews) {
               <div class="product-summary-card__rating">
                 <span class="product-summary-card__score">
                   {{
-                  reviews.length
-                  ? (
-                    reviews.reduce((acc, review) => acc + review.rating, 0) /
                     reviews.length
-                  ).toFixed(1)
-                  : 0
+                      ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1)
+                      : 0
                   }}
                 </span>
-
                 <div class="stars">
                   @for (star of [1, 2, 3, 4, 5]; track star) {
                     <span
                       [class.stars__empty]="
-                      star >
-                      (
-                        reviews.reduce((acc, review) => acc + review.rating, 0) /
-                        reviews.length
-                      )
-                    "
+                        star > reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+                      "
+                      >★</span
                     >
-                      ★
-                    </span>
                   }
                 </div>
-
-                <span class="product-summary-card__reviews">
-                  {{ reviews.length }} reviews gjithsej
-                </span>
+                <span class="product-summary-card__reviews"
+                  >{{ reviews.length }} reviews gjithsej</span
+                >
               </div>
             }
           </div>
@@ -75,26 +54,19 @@
           <div class="rating-breakdown">
             @for (rating of [5, 4, 3, 2, 1]; track rating) {
               <div class="rating-breakdown__row">
-                <span class="rating-breakdown__label"> {{ rating }}★ </span>
-
+                <span class="rating-breakdown__label">{{ rating }}★</span>
                 <div class="rating-breakdown__track">
                   <div
                     class="rating-breakdown__fill"
                     [style.width.%]="
-                    reviews.length
-                      ? (
-                        reviews.filter(r => r.rating === rating).length /
-                        reviews.length
-                        ) * 100
+                      reviews.length
+                        ? (reviews.filter(r => r.rating === rating).length / reviews.length) * 100
                         : 0
-                        "
+                    "
                   ></div>
                 </div>
-
                 <span class="rating-breakdown__count">
-                  {{
-                  reviews.filter(r => r.rating === rating).length
-                  }}
+                  {{ reviews.filter(r => r.rating === rating).length }}
                 </span>
               </div>
             }
@@ -102,7 +74,9 @@
         }
       </section>
 
-      <button type="button" class="write-review-button">+ Shkruaj nje review</button>
+      <button type="button" class="write-review-button" (click)="openReviewModal()">
+        + Shkruaj nje review
+      </button>
 
       @if (store.reviews$ | async; as reviews) {
         <section class="reviews-section">
@@ -115,22 +89,16 @@
                   <div class="review-card__avatar">
                     {{ review.first_name?.charAt(0) }}{{ review.last_name?.charAt(0) }}
                   </div>
-
                   <div class="review-card__meta">
                     <h3 class="review-card__name">
-                      {{ review.first_name }}
-                      {{ review.last_name }}
+                      {{ review.first_name }} {{ review.last_name }}
                     </h3>
-
-                    <p class="review-card__date">
-                      {{ review.created_at | date: 'dd MMMM yyyy' }}
-                    </p>
+                    <p class="review-card__date">{{ review.created_at | date: 'dd MMMM yyyy' }}</p>
                   </div>
                 </div>
 
                 <div *appHasRole="'admin'" class="review-card__verified">
-                  <i class="material-icons">edit</i>
-                  <button class="btn-edit"></button>
+                  <button class="btn-edit"><i class="material-icons">edit</i></button>
                   <button class="btn-delete"><i class="material-icons">delete_sweep</i></button>
                 </div>
               </header>
@@ -140,18 +108,15 @@
                 [attr.aria-label]="'Vleresimi ' + review.rating + ' nga 5'"
               >
                 @for (star of [1, 2, 3, 4, 5]; track star) {
-                  <span [class.stars__empty]="star > review.rating"> ★ </span>
+                  <span [class.stars__empty]="star > review.rating">★</span>
                 }
               </div>
 
-              <p class="review-card__comment">
-                {{ review.comment }}
-              </p>
+              <p class="review-card__comment">{{ review.comment }}</p>
 
               <footer class="review-card__footer">
                 <div class="review-card__actions">
                   <button type="button" class="review-action">👍</button>
-
                   <button type="button" class="review-action review-action--small">👎</button>
                 </div>
               </footer>
@@ -162,3 +127,72 @@
     }
   </div>
 </div>
+
+@if (showReviewModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Shkruaj nje Review</h3>
+        <button class="cat-modal-close-x" (click)="closeReviewModal()">×</button>
+      </div>
+
+      <form [formGroup]="reviewForm" (ngSubmit)="onReviewSubmit()" class="cat-modal-form">
+        <div class="cat-form-group">
+          <label class="cat-form-label">Vleresimi</label>
+          <div class="star-picker">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <span
+                class="star-pick"
+                [class.active]="star <= (hoveredStar || reviewForm.get('rating')?.value)"
+                (mouseenter)="hoveredStar = star"
+                (mouseleave)="hoveredStar = 0"
+                (click)="reviewForm.get('rating')?.setValue(star)"
+                >★</span
+              >
+            }
+          </div>
+          @if (reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched) {
+            <div class="cat-error-wrapper">
+              <small class="cat-error-text">Vleresimi eshte i detyrueshem.</small>
+            </div>
+          }
+        </div>
+
+        <div class="cat-form-group">
+          <label class="cat-form-label">Komenti</label>
+          <textarea
+            formControlName="comment"
+            rows="4"
+            placeholder="Shkruaj komentin tuaj..."
+            class="cat-form-textarea"
+            [class.cat-input-error]="
+              reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched
+            "
+          ></textarea>
+          @if (reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched) {
+            <div class="cat-error-wrapper">
+              <small class="cat-error-text">Komenti eshte i detyrueshem.</small>
+            </div>
+          }
+        </div>
+
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeReviewModal()">
+            Anulo
+          </button>
+          <button
+            type="submit"
+            class="cat-btn-primary"
+            [disabled]="reviewForm.invalid || (store.loading$ | async)"
+          >
+            @if (store.loading$ | async) {
+              Duke u derguar...
+            } @else {
+              Dergo Review
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
