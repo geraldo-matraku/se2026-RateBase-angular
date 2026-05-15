@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environments } from '../../../../environments/environments';
 
@@ -41,6 +41,15 @@ export class CategoryProductService {
 
   updateProduct(id: number, formData: FormData): Observable<any> {
     return this.http.post(`${environments.apiUrl}products/${id}`, formData, {
+      withCredentials: true,
+    });
+  }
+
+  searchProductsByCategory(categoryId: number, query: string): Observable<any> {
+    const params = new HttpParams().set('categoryId', categoryId).set('q', query);
+
+    return this.http.get(`${environments.apiUrl}products/searchByCategory.php`, {
+      params,
       withCredentials: true,
     });
   }

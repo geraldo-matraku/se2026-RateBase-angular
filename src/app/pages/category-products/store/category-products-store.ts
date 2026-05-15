@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { catchError, EMPTY, pipe, switchMap, tap, map, delay } from 'rxjs';
+import { catchError, EMPTY, pipe, switchMap, tap, map, delay, debounceTime } from 'rxjs';
 import {
   CategoryProductService,
   CreateProductPayload,
@@ -145,6 +145,28 @@ export class CategoryProductStore extends ComponentStore<ProductState> {
             this.patchState({
               loading: false,
               error: err.error?.message || 'Perditesimi deshtoi. Provoni perseri.',
+            });
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
+  readonly searchProducts = this.effect<{ categoryId: number; query: string }>(
+    pipe(
+      debounceTime(500),
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap(({ categoryId, query }) =>
+        this.categoryProductsService.searchProductsByCategory(categoryId, query).pipe(
+          map((res: any) => res.data || []),
+          tap((products) => {
+            this.patchState({ products, loading: false });
+          }),
+          catchError((err) => {
+            this.patchState({
+              loading: false,
+              error: err.error?.message || 'Kerkimi deshtoi.',
             });
             return EMPTY;
           }),
