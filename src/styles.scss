@@ -321,3 +321,55 @@ a:active {
     }
   }
 }
+
+.cat-file-input {
+  width: 100%;
+  cursor: pointer;
+
+  &::file-selector-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #185fa5;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: Inter, sans-serif;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: #14508a;
+    }
+  }
+
+  color: #6b7280;
+  font-size: 13px;
+  font-family: Inter, sans-serif;
+}
+
+.cat-modal-container {
+  .cat-form-input,
+  .cat-form-textarea {
+    font-size: 14px !important;
+    font-family: Inter, sans-serif !important;
+    color: #1e293b !important;
+    line-height: 1.5 !important;
+  }
+
+  .cat-form-label {
+    font-size: 13px !important;
+    font-family: Inter, sans-serif !important;
+  }
+
+  .cat-modal-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    font-family: Inter, sans-serif !important;
+    color: #1e293b !important;
+  }
+}

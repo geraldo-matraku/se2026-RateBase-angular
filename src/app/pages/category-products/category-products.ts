@@ -68,7 +68,16 @@ export class CategoryProducts implements OnInit {
     if (file) this.selectedFile = file;
   }
 
-  onSearchChange(val: string) {}
+  onSearchChange(val: string) {
+    if (!val || val.trim() === '') {
+      this.store.loadProducts(this.categoryId);
+      return;
+    }
+    this.store.searchProducts({
+      categoryId: this.categoryId,
+      query: val.trim(),
+    });
+  }
 
   openCreateModal() {
     this.showCreateModal = true;

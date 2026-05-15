@@ -181,24 +181,9 @@ import { RoleDirective } from '../../shared/directives/role-directive';
         line-height: 1.5;
         color: #6b7280;
 
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-
         overflow: hidden;
         text-overflow: ellipsis;
       }
-    }
-
-    /* BUTTONS */
-    .action_container {
-      margin-top: 18px;
-
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-
-      flex-wrap: wrap;
     }
 
     .empty-state {
