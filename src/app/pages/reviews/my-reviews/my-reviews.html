@@ -1,1 +1,53 @@
-<p>my-reviews works!</p>
+<div class="my-reviews-container">
+  <div class="my-reviews-inner">
+    <div class="my-reviews-header">
+      <div>
+        <h2 class="my-reviews-title">
+          Vleresimet e Mia
+          <span class="my-reviews-count">{{ store.totalReviews$ | async }}</span>
+        </h2>
+      </div>
+    </div>
+
+    @if (store.loading$ | async) {
+      <app-spinner></app-spinner>
+    } @else {
+      @if (store.error$ | async; as error) {
+        <div class="error-msg">{{ error }}</div>
+      }
+
+      @if (store.reviews$ | async; as reviews) {
+        @if (reviews.length === 0) {
+          <div class="empty-state">Nuk keni asnje vleresim ende.</div>
+        } @else {
+          <section class="reviews-section">
+            @for (review of reviews; track review.review_id) {
+              <article class="review-card">
+                <div class="review-card__top">
+                  <div class="review-card__stars">
+                    @for (star of [1, 2, 3, 4, 5]; track star) {
+                      <span [class.stars__empty]="star > review.rating">★</span>
+                    }
+                  </div>
+                  <span class="review-card__category-badge">
+                    {{ review.category_name }}
+                  </span>
+                </div>
+
+                <h3 class="review-card__product-name">{{ review.product_name }}</h3>
+
+                <p class="review-card__comment">{{ review.comment }}</p>
+
+                <div class="review-card__footer">
+                  <span class="review-card__date">
+                    {{ review.created_at | date: 'dd MMMM yyyy' }}
+                  </span>
+                </div>
+              </article>
+            }
+          </section>
+        }
+      }
+    }
+  </div>
+</div>

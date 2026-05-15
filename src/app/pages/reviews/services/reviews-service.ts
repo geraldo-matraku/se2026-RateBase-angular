@@ -12,4 +12,8 @@ export class ReviewsService {
   getReviewsByProductId(productId: number): Observable<any> {
     return this.http.get(`${environments.apiUrl}reviews/getByProduct.php?product_id=${productId}`);
   }
+
+  getMyReviews(): Observable<any> {
+    return this.http.get(`${environments.apiUrl}reviews/myreviews.php`, { withCredentials: true });
+  }
 }
