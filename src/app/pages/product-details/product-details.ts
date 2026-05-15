@@ -1,15 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDetailsStore } from './store/product-details-store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { map, tap } from 'rxjs';
 import { RoleDirective } from '../../shared/directives/role-directive';
 import { CategoriesService } from '../categories/services/categoriesService';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
+import { AdminOrOwnerDirective } from '../../shared/directives/reviewRole-directive';
 
 @Component({
   selector: 'app-product-details',
-  imports: [AsyncPipe, DatePipe, RoleDirective, ReactiveFormsModule],
+  imports: [AsyncPipe, DatePipe, ReactiveFormsModule, AdminOrOwnerDirective],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
@@ -71,5 +72,25 @@ export class ProductDetails implements OnInit {
     });
 
     this.closeReviewModal();
+  }
+
+  showDeleteReviewModal = false;
+  reviewToDelete: { id: number; name: string } | null = null;
+
+  openDeleteReviewModal(id: number, name: string) {
+    this.reviewToDelete = { id, name };
+    this.showDeleteReviewModal = true;
+  }
+
+  closeDeleteReviewModal() {
+    this.showDeleteReviewModal = false;
+    this.reviewToDelete = null;
+  }
+
+  confirmDeleteReview() {
+    if (this.reviewToDelete) {
+      this.store.deleteReview(this.reviewToDelete.id);
+      this.closeDeleteReviewModal();
+    }
   }
 }

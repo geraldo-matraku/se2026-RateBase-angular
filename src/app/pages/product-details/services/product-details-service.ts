@@ -15,11 +15,15 @@ export class ProductDetailsService {
     comment: string;
     image?: string;
   }): Observable<any> {
-    return this.http.post(
-      `http://localhost/sistem-vleresimi-produktesh-php/api/reviews/create.php`,
-      payload,
-      { withCredentials: true },
-    );
+    return this.http.post(`${environments.apiUrl}reviews/create.php`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  deleteReview(id: number): Observable<any> {
+    return this.http.delete(`${environments.apiUrl}reviews/delete.php?reviewid=${id}`, {
+      withCredentials: true,
+    });
   }
 
   getProductById(productId: number): Observable<any> {

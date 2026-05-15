@@ -74,7 +74,7 @@
         }
       </section>
 
-      <button type="button" class="write-review-button" (click)="openReviewModal()">
+      <button type="button" class="add-btn" (click)="openReviewModal()">
         + Shkruaj nje review
       </button>
 
@@ -97,9 +97,19 @@
                   </div>
                 </div>
 
-                <div *appHasRole="'admin'" class="review-card__verified">
+                <div *appAdminOrOwner="review.user_id" class="review-card__verified">
                   <button class="btn-edit"><i class="material-icons">edit</i></button>
-                  <button class="btn-delete"><i class="material-icons">delete_sweep</i></button>
+                  <button
+                    class="btn-delete"
+                    (click)="
+                      openDeleteReviewModal(
+                        review.review_id,
+                        review.first_name + ' ' + review.last_name
+                      )
+                    "
+                  >
+                    <i class="material-icons">delete_sweep</i>
+                  </button>
                 </div>
               </header>
 
@@ -193,6 +203,42 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+}
+@if (showDeleteReviewModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Konfirmo Fshirjen</h3>
+        <button class="cat-modal-close-x" (click)="closeDeleteReviewModal()">×</button>
+      </div>
+
+      <div class="cat-modal-form">
+        <p style="color: #475569; margin-bottom: 20px">
+          A jeni i sigurt qe deshironi te fshini reviewin e
+          <strong style="color: #111827">"{{ reviewToDelete?.name }}"</strong>? Ky veprim nuk mund
+          te kthehet mbrapa.
+        </p>
+
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeDeleteReviewModal()">
+            Anulo
+          </button>
+          <button
+            type="button"
+            class="cat-btn-danger"
+            (click)="confirmDeleteReview()"
+            [disabled]="store.loading$ | async"
+          >
+            @if (store.loading$ | async) {
+              Duke u fshire...
+            } @else {
+              Fshij Reviewin
+            }
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 }

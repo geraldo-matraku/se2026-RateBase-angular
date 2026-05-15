@@ -46,6 +46,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 32px;
+  margin-bottom: 15px;
 }
 
 .product-summary-card__left {
@@ -271,17 +272,22 @@
   color: #111111;
 }
 
+// .review-card__verified {
+//   min-height: 24px;
+//   padding: 5px 13px;
+//   border-radius: 999px;
+//   background: #dcf7ef;
+//   color: #168067;
+//   font-size: 11px;
+//   line-height: 14px;
+//   font-weight: 800;
+//   box-sizing: border-box;
+//   white-space: nowrap;
+// }
+
 .review-card__verified {
-  min-height: 24px;
-  padding: 5px 13px;
-  border-radius: 999px;
-  background: #dcf7ef;
-  color: #168067;
-  font-size: 11px;
-  line-height: 14px;
-  font-weight: 800;
-  box-sizing: border-box;
-  white-space: nowrap;
+  display: flex;
+  gap: 5px;
 }
 
 .review-card__stars {

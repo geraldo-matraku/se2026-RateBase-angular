@@ -95,4 +95,24 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
       ),
     ),
   );
+
+  readonly deleteReview = this.effect<number>(
+    pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap((reviewId) =>
+        this.productService.deleteReview(reviewId).pipe(
+          tap(() => {
+            this.fetchProductDetails(this.get().product?.product_id);
+          }),
+          catchError((err) => {
+            this.patchState({
+              loading: false,
+              error: err.error?.message || 'Fshirja deshtoi.',
+            });
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
 }
