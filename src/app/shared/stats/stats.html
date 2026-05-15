@@ -24,8 +24,13 @@
   </div>
 
   <div class="stat-card">
-    <div class="label">Status sistemi</div>
-    <div class="value">Online</div>
-    <div class="change positive">API funksionale</div>
+    <div class="label">Vleresime</div>
+    <div class="value">{{ stats?.total_reviews || 0 }}</div>
+    <div class="change positive">Vleresime Totale</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Mesatare Vleresimesh</div>
+    <div class="value">{{ stats?.average_rating || 0 }}</div>
+    <div class="change positive">Rating Totale</div>
   </div>
 </div>
