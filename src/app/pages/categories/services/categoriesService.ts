@@ -24,13 +24,16 @@ export class CategoriesService {
   public readonly uploadUrl = 'http://localhost/sistem-vleresimi-produktesh-php/uploads/';
 
   getCategories(): Observable<CategoriesResponse> {
-    return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`);
+    return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`, {
+      withCredentials: true,
+    });
   }
 
   searchCategories(query: string): Observable<CategoriesResponse> {
     const params = new HttpParams().set('q', query);
     return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`, {
       params,
+      withCredentials: true,
     });
   }
   createCategory(formData: FormData): Observable<any> {
