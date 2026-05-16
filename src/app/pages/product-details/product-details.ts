@@ -3,7 +3,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDetailsStore } from './store/product-details-store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { map, tap } from 'rxjs';
-import { RoleDirective } from '../../shared/directives/role-directive';
 import { CategoriesService } from '../categories/services/categoriesService';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { AdminOrOwnerDirective } from '../../shared/directives/reviewRole-directive';
@@ -92,5 +91,42 @@ export class ProductDetails implements OnInit {
       this.store.deleteReview(this.reviewToDelete.id);
       this.closeDeleteReviewModal();
     }
+  }
+
+  showEditReviewModal = false;
+  selectedReviewId: number | null = null;
+  hoveredEditStar = 0;
+
+  reviewEditForm: FormGroup = this.fb.group({
+    rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
+    comment: ['', [Validators.required]],
+  });
+
+  openEditReviewModal(review: any) {
+    this.selectedReviewId = review.review_id;
+    this.reviewEditForm.patchValue({
+      rating: review.rating,
+      comment: review.comment,
+    });
+    this.showEditReviewModal = true;
+  }
+
+  closeEditReviewModal() {
+    this.showEditReviewModal = false;
+    this.selectedReviewId = null;
+    this.hoveredEditStar = 0;
+    this.reviewEditForm.reset();
+  }
+
+  onEditReviewSubmit() {
+    if (!this.selectedReviewId || this.reviewEditForm.invalid) return;
+
+    this.store.updateReview({
+      id: this.selectedReviewId,
+      rating: this.reviewEditForm.value.rating,
+      comment: this.reviewEditForm.value.comment,
+    });
+
+    this.closeEditReviewModal();
   }
 }

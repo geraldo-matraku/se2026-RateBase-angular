@@ -95,7 +95,9 @@
                 </div>
 
                 <div *appAdminOrOwner="review.user_id" class="review-card__verified">
-                  <button class="btn-edit"><i class="material-icons">edit</i></button>
+                  <button class="btn-edit" (click)="openEditReviewModal(review)">
+                    <i class="material-icons">edit</i>
+                  </button>
                   <button
                     class="btn-delete"
                     (click)="
@@ -123,8 +125,24 @@
 
               <footer class="review-card__footer">
                 <div class="review-card__actions">
-                  <button type="button" class="review-action">👍</button>
-                  <button type="button" class="review-action review-action--small">👎</button>
+                  <button
+                    type="button"
+                    class="review-action"
+                    [class.active-up]="review.my_vote === 'up'"
+                    (click)="store.voteReview({ review_id: review.review_id, type: 'up' })"
+                  >
+                    <i class="material-icons">thumb_up</i>
+                    {{ review.up_count || 0 }}
+                  </button>
+                  <button
+                    type="button"
+                    class="review-action"
+                    [class.active-down]="review.my_vote === 'down'"
+                    (click)="store.voteReview({ review_id: review.review_id, type: 'down' })"
+                  >
+                    <i class="material-icons">thumb_down</i>
+                    {{ review.down_count || 0 }}
+                  </button>
                 </div>
               </footer>
             </article>
@@ -236,6 +254,75 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+}
+
+@if (showEditReviewModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container">
+      <div class="cat-modal-header">
+        <h3 class="cat-modal-title">Edito Reviewn</h3>
+        <button class="cat-modal-close-x" (click)="closeEditReviewModal()">×</button>
+      </div>
+
+      <form [formGroup]="reviewEditForm" (ngSubmit)="onEditReviewSubmit()" class="cat-modal-form">
+        <div class="cat-form-group">
+          <label class="cat-form-label">Vleresimi</label>
+          <div class="star-picker">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <span
+                class="star-pick"
+                [class.active]="star <= (hoveredEditStar || reviewEditForm.get('rating')?.value)"
+                (mouseenter)="hoveredEditStar = star"
+                (mouseleave)="hoveredEditStar = 0"
+                (click)="reviewEditForm.get('rating')?.setValue(star)"
+                >★</span
+              >
+            }
+          </div>
+          @if (reviewEditForm.get('rating')?.invalid && reviewEditForm.get('rating')?.touched) {
+            <div class="cat-error-wrapper">
+              <small class="cat-error-text">Vleresimi eshte i detyrueshem.</small>
+            </div>
+          }
+        </div>
+
+        <div class="cat-form-group">
+          <label class="cat-form-label">Komenti</label>
+          <textarea
+            formControlName="comment"
+            rows="4"
+            placeholder="Shkruaj komentin tuaj..."
+            class="cat-form-textarea"
+            [class.cat-input-error]="
+              reviewEditForm.get('comment')?.invalid && reviewEditForm.get('comment')?.touched
+            "
+          ></textarea>
+          @if (reviewEditForm.get('comment')?.invalid && reviewEditForm.get('comment')?.touched) {
+            <div class="cat-error-wrapper">
+              <small class="cat-error-text">Komenti eshte i detyrueshem.</small>
+            </div>
+          }
+        </div>
+
+        <div class="cat-modal-footer-actions">
+          <button type="button" class="cat-btn-secondary" (click)="closeEditReviewModal()">
+            Anulo
+          </button>
+          <button
+            type="submit"
+            class="cat-btn-primary"
+            [disabled]="reviewEditForm.invalid || (store.loading$ | async)"
+          >
+            @if (store.loading$ | async) {
+              Duke u ruajtur...
+            } @else {
+              Ruaj Ndryshimet
+            }
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 }
