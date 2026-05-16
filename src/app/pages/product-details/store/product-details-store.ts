@@ -14,7 +14,7 @@ export interface ProductDetailsState {
 
 @Injectable({ providedIn: 'root' })
 export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
-  private productService = inject(ProductDetailsService);
+  private productDetailsService = inject(ProductDetailsService);
   private reviewService = inject(ReviewsService);
 
   constructor() {
@@ -45,7 +45,7 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
 
       switchMap((productId) =>
         forkJoin({
-          product: this.productService.getProductById(productId),
+          product: this.productDetailsService.getProductById(productId),
           reviews: this.reviewService.getReviewsByProductId(productId),
         }).pipe(
           tap({
@@ -78,7 +78,7 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
     pipe(
       tap(() => this.patchState({ loading: true, error: null })),
       switchMap((payload) =>
-        this.productService.createReview(payload).pipe(
+        this.reviewService.createReview(payload).pipe(
           tap({
             next: () => {
               this.fetchProductDetails(payload.product_id);
@@ -100,7 +100,7 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
     pipe(
       tap(() => this.patchState({ loading: true, error: null })),
       switchMap((reviewId) =>
-        this.productService.deleteReview(reviewId).pipe(
+        this.reviewService.deleteReview(reviewId).pipe(
           tap(() => {
             this.fetchProductDetails(this.get().product?.product_id);
           }),
@@ -111,6 +111,49 @@ export class ProductDetailsStore extends ComponentStore<ProductDetailsState> {
             });
             return EMPTY;
           }),
+        ),
+      ),
+    ),
+  );
+
+  readonly updateReview = this.effect<{ id: number; rating: number; comment: string }>(
+    pipe(
+      tap(() => this.patchState({ loading: true, error: null })),
+      switchMap(({ id, rating, comment }) =>
+        this.reviewService.updateReview(id, { rating, comment }).pipe(
+          tap(() => {
+            this.fetchProductDetails(this.get().product?.product_id);
+          }),
+          catchError((err) => {
+            this.patchState({
+              loading: false,
+              error: err.error?.message || 'Perditesimi deshtoi.',
+            });
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
+  readonly voteReview = this.effect<{ review_id: number; type: 'up' | 'down' }>(
+    pipe(
+      switchMap(({ review_id, type }) =>
+        this.reviewService.vote(review_id, type).pipe(
+          tap((res: any) => {
+            const reviews = this.get().reviews.map((r) =>
+              r.review_id === review_id
+                ? {
+                    ...r,
+                    up_count: res.up_count,
+                    down_count: res.down_count,
+                    my_vote: res.action === 'removed' ? null : type,
+                  }
+                : r,
+            );
+            this.patchState({ reviews });
+          }),
+          catchError(() => EMPTY),
         ),
       ),
     ),

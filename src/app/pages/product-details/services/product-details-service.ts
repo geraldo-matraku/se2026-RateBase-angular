@@ -9,24 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class ProductDetailsService {
   private http = inject(HttpClient);
 
-  createReview(payload: {
-    product_id: number;
-    rating: number;
-    comment: string;
-    image?: string;
-  }): Observable<any> {
-    return this.http.post(`${environments.apiUrl}reviews/create.php`, payload, {
-      withCredentials: true,
-    });
-  }
-
-  deleteReview(id: number): Observable<any> {
-    return this.http.delete(`${environments.apiUrl}reviews/delete.php?reviewid=${id}`, {
-      withCredentials: true,
-    });
-  }
-
   getProductById(productId: number): Observable<any> {
-    return this.http.get(`${environments.apiUrl}products/${productId}`);
+    return this.http.get(`${environments.apiUrl}products/${productId}`, { withCredentials: true });
   }
 }
