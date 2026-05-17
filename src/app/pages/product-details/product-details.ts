@@ -85,8 +85,8 @@ export class ProductDetails implements OnInit {
   paymentLoading = false;
 
   donationOptions = environments.paddle.prices;
-  selectedDonation: DonationOption = this.donationOptions[0];
-  selectedAmount = this.selectedDonation.amount;
+  selectedDonation: DonationOption | null = null;
+  selectedAmount: number | null = null;
 
   private paddleInitialized = false;
   private pendingPaymentId: number | null = null;
@@ -190,6 +190,10 @@ export class ProductDetails implements OnInit {
     this.paymentSuccess = false;
     this.paymentError = null;
     this.paymentLoading = false;
+
+    this.selectedDonation = null;
+    this.selectedAmount = null;
+    this.pendingPaymentId = null;
   }
 
   closePaymentModal(): void {
@@ -198,21 +202,27 @@ export class ProductDetails implements OnInit {
     this.paymentError = null;
     this.paymentLoading = false;
 
-    this.selectedDonation = this.donationOptions[0];
-    this.selectedAmount = this.selectedDonation.amount;
-
+    this.selectedDonation = null;
+    this.selectedAmount = null;
     this.pendingPaymentId = null;
   }
 
   onAmountChange(donation: DonationOption): void {
     this.selectedDonation = donation;
     this.selectedAmount = donation.amount;
+    this.paymentError = null;
   }
 
   async payWithPaddle(): Promise<void> {
     this.paymentLoading = true;
     this.paymentError = null;
     this.paymentSuccess = false;
+
+    if (!this.selectedDonation || !this.selectedAmount) {
+      this.paymentError = 'Ju lutem zgjidhni një shumë për donacionin.';
+      this.paymentLoading = false;
+      return;
+    }
 
     try {
       const response = await firstValueFrom(this.paymentService.createOrder(this.selectedAmount));
@@ -232,8 +242,6 @@ export class ProductDetails implements OnInit {
         this.paymentLoading = false;
         return;
       }
-
-      console.log('Selected Paddle donation:', this.selectedDonation);
 
       window.Paddle.Checkout.open({
         items: [

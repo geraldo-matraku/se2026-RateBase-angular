@@ -161,7 +161,7 @@
   <div class="cat-modal-overlay">
     <div class="cat-modal-container payment-modal">
       <div class="cat-modal-header">
-        <div>
+        <div class="payment-modal-heading">
           <h3 class="cat-modal-title">Buy us a coffee</h3>
           <p class="payment-modal-subtitle">Mbeshtet platformen me nje donacion te vogel.</p>
         </div>
@@ -177,38 +177,45 @@
             <p>Email konfirmues u dergua me sukses.</p>
           </div>
         } @else {
-          <p class="payment-modal-label">Zgjidhni shumen e donacionit:</p>
+          <div class="payment-modal-section">
+            <p class="payment-modal-label">Zgjidhni shumen e donacionit:</p>
 
-          <div class="amount-selector">
-            @for (donation of donationOptions; track donation.priceId) {
-              <button
-                type="button"
-                class="amount-btn"
-                [class.selected]="selectedDonation.priceId === donation.priceId"
-                (click)="onAmountChange(donation)"
-              >
-                {{ donation.label }}
-              </button>
-            }
+            <div class="amount-selector">
+              @for (donation of donationOptions; track donation.priceId) {
+                <button
+                  type="button"
+                  class="amount-btn"
+                  [class.selected]="selectedDonation?.priceId === donation.priceId"
+                  (click)="onAmountChange(donation)"
+                >
+                  <span class="amount-btn__label">{{ donation.label }}</span>
+                </button>
+              }
+            </div>
           </div>
 
           @if (paymentError) {
             <div class="error-msg">{{ paymentError }}</div>
           }
+          <div class="cat-modal-footer-actions payment-modal-actions">
+            <button type="button" class="cat-btn-secondary" (click)="closePaymentModal()">
+              Anulo
+            </button>
 
-          <button
-            type="button"
-            class="paddle-pay-button"
-            (click)="payWithPaddle()"
-            [disabled]="paymentLoading"
-          >
-            @if (paymentLoading) {
-              <span class="paddle-pay-button__loader"></span>
-              Duke hapur pagesen...
-            } @else {
-              Paguaj
-            }
-          </button>
+            <button
+              type="button"
+              class="cat-btn-primary paddle-pay-button"
+              (click)="payWithPaddle()"
+              [disabled]="paymentLoading || !selectedDonation"
+            >
+              @if (paymentLoading) {
+                <span class="paddle-pay-button__loader"></span>
+              } @else {
+                Paguaj me Paddle
+              }
+            </button>
+          </div>
+          <p class="payment-modal-helper">Zgjidh nje shume per te vazhduar me pagesen</p>
         }
       </div>
     </div>
