@@ -398,3 +398,146 @@
     color: #dc2626;
   }
 }
+.review-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 17px;
+}
+
+.donate-button {
+  height: 36px;
+  padding: 0 17px;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: #fef3c7;
+  }
+}
+
+.review-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 17px;
+  justify-content: space-between;
+}
+.payment-modal {
+  max-width: 420px;
+}
+
+.payment-modal-subtitle {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.payment-modal-label {
+  margin: 0 0 16px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.paddle-pay-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0 18px;
+  border: 1px solid #185fa5;
+  border-radius: 10px;
+  background: #185fa5;
+  color: #ffffff;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: #124a82;
+    border-color: #124a82;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.paddle-pay-button__loader {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: paddle-loader-spin 0.75s linear infinite;
+}
+
+.payment-modal-helper {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.error-msg {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.payment-success {
+  text-align: center;
+  padding: 22px 12px;
+  color: #16a34a;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 2;
+}
+
+.payment-success__icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+@keyframes paddle-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

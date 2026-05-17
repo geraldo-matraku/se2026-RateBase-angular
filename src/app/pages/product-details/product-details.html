@@ -71,9 +71,14 @@
         }
       </section>
 
-      <button type="button" class="add-btn" (click)="openReviewModal()">
-        + Shkruaj nje review
-      </button>
+      <div class="review-buttons">
+        <button type="button" class="add-btn" (click)="openReviewModal()">
+          + Shkruaj nje review
+        </button>
+        <button type="button" class="donate-button" (click)="openPaymentModal()">
+          Buy us a coffee
+        </button>
+      </div>
 
       @if (store.reviews$ | async; as reviews) {
         <section class="reviews-section">
@@ -152,6 +157,63 @@
     }
   </div>
 </div>
+@if (showPaymentModal) {
+  <div class="cat-modal-overlay">
+    <div class="cat-modal-container payment-modal">
+      <div class="cat-modal-header">
+        <div>
+          <h3 class="cat-modal-title">Buy us a coffee</h3>
+          <p class="payment-modal-subtitle">Mbeshtet platformen me nje donacion te vogel.</p>
+        </div>
+
+        <button type="button" class="cat-modal-close-x" (click)="closePaymentModal()">×</button>
+      </div>
+
+      <div class="cat-modal-form">
+        @if (paymentSuccess) {
+          <div class="payment-success">
+            <div class="payment-success__icon">✓</div>
+            <p>Faleminderit per mbeshtetjen tuaj!</p>
+            <p>Email konfirmues u dergua me sukses.</p>
+          </div>
+        } @else {
+          <p class="payment-modal-label">Zgjidhni shumen e donacionit:</p>
+
+          <div class="amount-selector">
+            @for (donation of donationOptions; track donation.priceId) {
+              <button
+                type="button"
+                class="amount-btn"
+                [class.selected]="selectedDonation.priceId === donation.priceId"
+                (click)="onAmountChange(donation)"
+              >
+                {{ donation.label }}
+              </button>
+            }
+          </div>
+
+          @if (paymentError) {
+            <div class="error-msg">{{ paymentError }}</div>
+          }
+
+          <button
+            type="button"
+            class="paddle-pay-button"
+            (click)="payWithPaddle()"
+            [disabled]="paymentLoading"
+          >
+            @if (paymentLoading) {
+              <span class="paddle-pay-button__loader"></span>
+              Duke hapur pagesen...
+            } @else {
+              Paguaj
+            }
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}
 
 @if (showReviewModal) {
   <div class="cat-modal-overlay">
