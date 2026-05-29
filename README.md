@@ -1,4 +1,3 @@
-# Frontend README
 
 ## Teknologjitë e Përdorura
 
