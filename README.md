@@ -87,7 +87,9 @@ npm test
 
 # Author
 
-Developed by RateBase Team :
+Developed by **RateBase** Team :
+
+
 **Geraldo Matraku** (Full-stack Developer / Team Leader)
 
 
