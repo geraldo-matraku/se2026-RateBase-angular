@@ -39,10 +39,6 @@ http://localhost:4200
 
 ---
 
----
-
----
-
 # Features
 
 ## Authentication
@@ -63,7 +59,6 @@ http://localhost:4200
 
 ---
 
----
 
 # Scripts
 
@@ -78,9 +73,6 @@ npm test
 
 ---
 
----
-
----
 
 # Future Improvements
 
@@ -96,11 +88,19 @@ npm test
 # Author
 
 Developed by RateBase Team :
-Geraldo Matraku (Full-stack Developer / Team Leader)
-Fatjon Çeçia (Backend Developer)
-Erald Agalliu (Database Administrator)
-Erold Nurce (Tester)
-Erind Laroshi (Designer)
+**Geraldo Matraku** (Full-stack Developer / Team Leader)
+
+
+**Fatjon Çeçia** (Backend Developer)
+
+
+**Erald Agalliu** (Database Administrator)
+
+
+**Erold Nurce** (Tester)
+
+
+**Erind Laroshi** (Designer)
 
 ---
 
