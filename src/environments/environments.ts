@@ -1,5 +1,5 @@
 export const environments = {
-  apiUrl: 'http://localhost/sistem-vleresimi-produktesh-php/api/',
+  apiUrl: 'https://se2026-ratebase-php-production.up.railway.app/',
   paddle: {
     environment: 'sandbox' as const,
     clientToken: 'test_cdd3510ccb30f6205222e640a8f',
