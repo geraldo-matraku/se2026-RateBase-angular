@@ -1,59 +1,107 @@
-# SistemVlersimiProdukteshAngular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+## Teknologjitë e Përdorura
 
-## Development server
+## Frontend
 
-To start a local development server, run:
+* Angular 21
+* Angular Material
+* Angular CDK
+* RxJS
+* NgRx Component Store
+* TypeScript
+* Vitest
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+# Instalimi
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 1. Clone Repository
 
 ```bash
-ng generate --help
+git clone https://github.com/geraldo-matraku/se2026-RateBase-angular
 ```
 
-## Building
+---
 
-To build the project run:
+# Setup Frontend
 
 ```bash
-ng build
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Frontend do të startojë në:
 
 ```bash
-ng test
+http://localhost:4200
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+# Features
+
+## Authentication
+
+* Register
+* Login
+* Password Hashing
+* Protected Routes
+
+## Frontend Features
+
+* Responsive Design
+* Angular Routing
+* Angular Material UI
+* Reactive Forms
+* API Integration
+* State Management me NgRx Component Store
+
+---
+
+
+# Scripts
+
+## Frontend
 
 ```bash
-ng e2e
+npm start
+npm run build
+npm run watch
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Future Improvements
+
+* Real-time notifications
+* Admin dashboard
+* Analytics
+* Dark mode
+* Testing me Vitest
+* Docker support
+
+---
+
+# Author
+
+Developed by **RateBase** Team :
+
+
+**Geraldo Matraku** (Full-stack Developer / Team Leader)
+
+
+**Fatjon Çeçia** (Backend Developer)
+
+
+**Erald Agalliu** (Database Administrator)
+
+
+**Erold Nurce** (Tester)
+
+
+**Erind Laroshi** (Designer)
+
+---
+
