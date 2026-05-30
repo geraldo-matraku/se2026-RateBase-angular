@@ -1,5 +1,5 @@
 export const environments = {
-  apiUrl: 'http://localhost/sistem-vleresimi-produktesh-php/api/',
+  apiUrl: 'https://ratebase.infinityfreeapp.com/',
   paddle: {
     environment: 'sandbox' as const,
     clientToken: 'test_cdd3510ccb30f6205222e640a8f',
