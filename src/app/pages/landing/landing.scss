@@ -675,3 +675,34 @@
     box-sizing: border-box;
   }
 }
+
+.landing-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 2rem 1.5rem;
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-credits strong {
+  color: #111;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
