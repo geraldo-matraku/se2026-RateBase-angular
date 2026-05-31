@@ -693,26 +693,38 @@
   text-align: center;
 }
 
-.team-label {
-  color: #111;
-  font-weight: 600;
-  margin-right: 4px;
-}
-
 .team-member {
   display: inline-block;
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-style: italic;
   font-weight: 700;
-  color: #1a1a1a;
-  letter-spacing: -0.01em;
-  padding: 2px 4px;
+  font-size: 1.05rem;
+  color: #111111;
+  letter-spacing: 0.02em;
   position: relative;
-  transition: all 0.2s ease-in-out;
-  cursor: default;
+  transition: color 0.2s ease;
+}
+
+.team-member::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #0066cc;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
 }
 
 .team-member:hover {
   color: #0066cc;
-  transform: translateY(-1px);
+}
+
+.team-member:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 @media (min-width: 768px) {
