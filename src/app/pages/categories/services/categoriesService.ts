@@ -21,7 +21,7 @@ export interface CategoriesResponse {
 export class CategoriesService {
   private http = inject(HttpClient);
 
-  public readonly uploadUrl = 'http://localhost/sistem-vleresimi-produktesh-php/uploads/';
+  public readonly uploadUrl = 'https://se2026-ratebase-php-production.up.railway.app/uploads/';
 
   getCategories(): Observable<CategoriesResponse> {
     return this.http.get<CategoriesResponse>(`${environments.apiUrl}categories/getAll`, {
