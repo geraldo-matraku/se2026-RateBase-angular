@@ -41,6 +41,7 @@ export class ReviewsService {
   getMyReviews(): Observable<any> {
     return this.http.get(`${environments.apiUrl}reviews/myReviews.php`, { withCredentials: true });
   }
+
   vote(review_id: number, type: 'up' | 'down'): Observable<any> {
     return this.http.post(
       `${environments.apiUrl}votes/vote.php`,
